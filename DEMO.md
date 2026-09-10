@@ -46,7 +46,7 @@ This is **not** web search. Gemini is paused so answers are not shortened or rew
 
 ## Modules
 
-- **AI Chat** — Q&A, sources, thumbs up/down, session history.
+- **AI Chat** — Multi-turn Q&A with context retention, sources, thumbs up/down, session history.
 - **Knowledge** — Upload PDF / DOCX / TXT / MD. Draft → Approve / Outdated. Only approved text is searchable.
 - **BOT Automations** — 124 real Hurix RPA bots from the RPA list (CSV + seed). Add one or import CSV/JSON.
 - **Admin** — Counts, gaps, questions, feedback.

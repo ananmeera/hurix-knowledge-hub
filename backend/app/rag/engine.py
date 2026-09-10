@@ -15,12 +15,14 @@ GENERIC_TERMS = {
     "about","into","also","only","more","than","such","each","both","make","made",
     "from","they","their","them","should","must","been","being","will","that","this",
     "which","when","where","these","those","here","there","technique","techniques",
+    "according","specify","important","why",
 }
 BOT_INTENT = re.compile(r"\b(bot|bots|rpa)\b", re.I)
 CATEGORY_MARK = re.compile(r"\bcategory\s*:\s*", re.I)
 HEADER_NOISE = re.compile(r"(requested by|problem statement|developed using|request date|start date|end date|remarks)", re.I)
 CATALOG_HEADER = re.compile(r"(?m)^(?=\d{1,3}\s+[A-Z0-9][A-Za-z0-9][^.?\n]{3,})")
-TECHNIQUE_SPLIT = re.compile(r"(?m)(?=^(?:#{1,3}\s+)?Technique PDF\d+)")
+TECHNIQUE_SPLIT = re.compile(r"(?m)(?=^(?:#{1,3}\s+)?Technique\s+PDF\s*\d+)")
+TECHNIQUE_ID = re.compile(r"\b(pdf)\s*-?\s*(\d{1,3})\b", re.I)
 MD_HEADING_SPLIT = re.compile(r"(?m)(?=^#{1,3}\s+\S)")
 NAME_BEFORE_EMAIL = re.compile(r"^(.*?(?:Automation|Process|Bot|Guide|SOP|Script|Tool|Assistant))([a-z]{3,})$", re.I)
 
@@ -29,8 +31,13 @@ def _terms(text: str) -> set[str]:
     return {w for w in re.findall(r"[a-z0-9]+", text.lower()) if w not in STOPWORDS and (len(w) > 2 or w in SHORT_TERMS)}
 
 
+def _technique_ids(text: str) -> set[str]:
+    return {f"{match.group(1).lower()}{int(match.group(2))}" for match in TECHNIQUE_ID.finditer(text or "")}
+
+
 def _distinctive(query: str) -> set[str]:
-    return {term for term in _terms(query) if term not in GENERIC_TERMS and (len(term) >= 4 or term in SHORT_TERMS)}
+    terms = {term for term in _terms(query) if term not in GENERIC_TERMS and (len(term) >= 4 or term in SHORT_TERMS)}
+    return terms | _technique_ids(query)
 
 
 def _bot_intent(query: str) -> bool:
@@ -46,6 +53,14 @@ def _term_variants(term: str) -> list[str]:
         variants.append(word[:-1])
     else:
         variants.append(f"{word}s")
+    glued = re.fullmatch(r"([a-z]+)(\d{1,3})", word)
+    if glued:
+        number = str(int(glued.group(2)))
+        variants.extend([
+            f"{glued.group(1)}{number}",
+            f"{glued.group(1)} {number}",
+            f"{glued.group(1)}-{number}",
+        ])
     seen: list[str] = []
     for item in variants:
         if item not in seen:
@@ -73,6 +88,9 @@ def _term_df(term: str, sections: list[str]) -> int:
 
 
 def _focus_terms(query: str, sections: list[str], doc_title: str = "") -> set[str]:
+    anchors = {term for term in _technique_ids(query) if _term_in(term, doc_title) or _term_df(term, sections) > 0}
+    if anchors:
+        return anchors
     candidates = _distinctive(query)
     if not candidates:
         return set()
@@ -168,8 +186,7 @@ def _normalize_text(text: str) -> str:
     clean = re.sub(r"[ \t]+", " ", clean)
     clean = re.sub(r"([a-z])([A-Z])", r"\1 \2", clean)
     clean = _detach_emails(clean)
-    clean = re.sub(r"(?<=[a-zA-Z.;:])\s*(\d{1,2})\.\s+(?=[A-Z0-9])", r"\n\1. ", clean)
-    clean = re.sub(r"(?<=[.!?])\s*(\d{1,2})\.\s+", r"\n\1. ", clean)
+    clean = re.sub(r"(?<=[.!?;:])\s+(\d{1,2})\.\s+(?=[A-Z])", r"\n\1. ", clean)
     lines = [" ".join(line.split()) for line in clean.splitlines()]
     return "\n".join(line for line in lines if line).strip()
 
@@ -223,7 +240,7 @@ def _window_around_term(text: str, term: str) -> str | None:
     if start == 0:
         start = max(0, prefix.rfind("\n\n"))
     rest = text[term_end:]
-    nxt = re.search(r"\n(?:Technique PDF\d+|#{1,3}\s+\S)", rest)
+    nxt = re.search(r"\n(?:Technique\s+PDF\s*\d+|#{1,3}\s+\S)", rest)
     end = term_end + (nxt.start() if nxt else min(len(rest), 900))
     window = text[start:end].strip()
     return window if len(window) > 40 else None
@@ -294,10 +311,13 @@ def _section_markdown(section: str, fallback_title: str = "") -> str:
 
 
 def _rank_passages(ask: str, doc_title: str, normalized: str) -> tuple[list[tuple[float, str]], set[str]]:
+    anchors = _technique_ids(ask)
+    if anchors and not any(_term_in(term, f"{doc_title}\n{normalized}") for term in anchors):
+        return [], anchors
     base = _split_sections(normalized) or ([normalized] if normalized else [])
     if not base:
         return [], set()
-    focus = _focus_terms(ask, base, doc_title)
+    focus = _focus_terms(ask, base, doc_title) or anchors
     sections = _ensure_term_sections(base, normalized, focus or _distinctive(ask))
     scored: list[tuple[float, str]] = []
     for section in sections:
@@ -306,12 +326,13 @@ def _rank_passages(ask: str, doc_title: str, normalized: str) -> tuple[list[tupl
         if value <= 0:
             continue
         scored.append((value, section))
-    if focus:
-        matching = [(value, section) for value, section in scored if any(_term_in(term, section) for term in focus)]
+    required = anchors or focus
+    if required:
+        matching = [(value, section) for value, section in scored if any(_term_in(term, section) for term in required)]
         if matching:
             scored = matching
-        elif not any(_term_in(term, normalized) for term in focus):
-            return [], focus
+        else:
+            return [], required
     scored.sort(key=lambda pair: pair[0], reverse=True)
     return scored, focus
 
@@ -429,6 +450,13 @@ def _source_blob(item: dict) -> str:
 def _select_relevant(query: str, ranked: list[dict]) -> list[dict]:
     if not ranked:
         return []
+    anchors = _technique_ids(query)
+    if anchors:
+        matching = [item for item in ranked if any(_term_in(term, _source_blob(item)) for term in anchors)]
+        if matching:
+            ranked = matching
+        else:
+            return []
     blobs = [_source_blob(item) for item in ranked]
     focus = _focus_terms(query, blobs)
     if focus:
@@ -532,9 +560,90 @@ async def _summarize_with_openai(query: str, context: str) -> str:
     return (response.choices[0].message.content or "").strip() or "I could not generate an answer."
 
 
-async def answer_question(db: Session, query: str, user) -> tuple[str, list[dict], bool, str]:
-    category, search = _parse_category_query(query)
-    sources = retrieve(db, query, user)
+FOLLOW_MARK = re.compile(
+    r"\b(it|its|this|that|those|these|them|they|their|same|previous|above|"
+    r"what about|how about|and (?:the|that)|why is|why was|who owns|who is|who are|"
+    r"more detail|tell me more|continue|another one|the (?:same|last|previous))\b",
+    re.I,
+)
+
+
+def _looks_like_follow_up(query: str) -> bool:
+    text = (query or "").strip()
+    if not text:
+        return False
+    if _technique_ids(text):
+        return False
+    topical = _distinctive(text) - _technique_ids(text)
+    if len(topical) >= 3:
+        return False
+    if FOLLOW_MARK.search(text):
+        return True
+    words = re.findall(r"[a-z0-9]+", text.lower())
+    return len(words) <= 7 and len(topical) <= 1
+
+
+def _history_carry(history: list[dict]) -> dict:
+    users = [str(item.get("content") or "") for item in history if item.get("role") == "user"]
+    last_user = users[-1].strip() if users else ""
+    titles: list[str] = []
+    for item in reversed(history):
+        if item.get("role") != "assistant":
+            continue
+        for source in (item.get("sources") or [])[:3]:
+            title = str(source.get("title") or "").strip()
+            if title:
+                titles.append(title)
+        break
+    category = None
+    for text in reversed(users[-3:]):
+        found, _rest = _parse_category_query(text)
+        if found:
+            category = found
+            break
+    ids: list[str] = []
+    seen: set[str] = set()
+    for text in [*users[-3:], *titles]:
+        for tech in sorted(_technique_ids(text)):
+            if tech not in seen:
+                seen.add(tech)
+                ids.append(tech)
+    return {"last_user": last_user, "titles": titles, "category": category, "ids": ids}
+
+
+def resolve_search_query(query: str, history: list[dict] | None = None) -> str:
+    current = (query or "").strip()
+    if not current or not history or not _looks_like_follow_up(current):
+        return current
+    carry = _history_carry(history)
+    _last_cat, last_rest = _parse_category_query(carry["last_user"])
+    last_search = (last_rest or carry["last_user"]).strip()
+    bits = [current]
+    blob = current.lower()
+    if last_search and last_search.lower() not in blob:
+        bits.append(last_search)
+        blob = " ".join(bits).lower()
+    for title in carry["titles"][:2]:
+        if title.lower() not in blob:
+            bits.append(title)
+            blob = " ".join(bits).lower()
+    for tech in carry["ids"]:
+        if tech not in blob:
+            bits.append(tech)
+            blob = " ".join(bits).lower()
+    merged = " ".join(part for part in bits if part).strip()
+    current_cat, current_rest = _parse_category_query(current)
+    category = current_cat or carry["category"]
+    if category and not current_cat:
+        _ignored, body = _parse_category_query(merged) if CATEGORY_MARK.search(merged) else (None, merged)
+        return f"category: {category} - {body or merged}"
+    return merged
+
+
+async def answer_question(db: Session, query: str, user, history: list[dict] | None = None) -> tuple[str, list[dict], bool, str]:
+    search_query = resolve_search_query(query, history)
+    category, search = _parse_category_query(search_query)
+    sources = retrieve(db, search_query, user)
     if not sources or sources[0]["score"] < 0.18:
         record_gap(db, query)
         if category:

@@ -108,6 +108,21 @@ export default function ChatPage() {
   const resultRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
+    const saved = Number(sessionStorage.getItem('kh-chat-session') || 0);
+    if (!saved) return;
+    api.session(saved).then((rows) => {
+      if (!rows?.length) return;
+      setSessionId(saved);
+      setMessages(rows.map((row: any) => ({
+        id: row.id,
+        role: row.role,
+        content: row.content,
+        sources: row.sources || [],
+      })));
+    }).catch(() => undefined);
+  }, []);
+
+  useEffect(() => {
     resultRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }, [messages, busy]);
 
@@ -120,6 +135,7 @@ export default function ChatPage() {
     try {
       const r = await api.chat(q, sessionId);
       setSessionId(r.session_id);
+      sessionStorage.setItem('kh-chat-session', String(r.session_id));
       setMessages((m) => [...m, {
         id: r.message_id,
         role: 'assistant',
@@ -144,6 +160,13 @@ export default function ChatPage() {
     await api.feedback({ message_id: id, rating });
   };
 
+  const newChat = () => {
+    sessionStorage.removeItem('kh-chat-session');
+    setSessionId(undefined);
+    setMessages([]);
+    setInput('');
+  };
+
   return (
     <div className="chat-page">
       <div className="chat-scroll">
@@ -158,6 +181,9 @@ export default function ChatPage() {
           </section>
         ) : (
           <section className="conversation" aria-label="Conversation">
+            <div className="chat-toolbar">
+              <button type="button" onClick={newChat}>New chat</button>
+            </div>
             {messages.map((m, i) => (
               <article key={i} className={`message ${m.role}`} ref={i === messages.length - 1 ? resultRef : undefined}>
                 <div className="message-label">
@@ -198,7 +224,7 @@ export default function ChatPage() {
       </div>
       <form className="composer" onSubmit={submit}>
         <label className="sr-only" htmlFor="chat-input">Ask a question</label>
-        <textarea id="chat-input" value={input} onChange={(e) => setInput(e.target.value)} placeholder="Ask about bots, or search a category: Manual - PDF accessibility" rows={2} />
+        <textarea id="chat-input" value={input} onChange={(e) => setInput(e.target.value)} placeholder="Ask a question, then a follow-up in this chat" rows={2} />
         <button className="send-btn" disabled={busy || !input.trim()} aria-label="Send message"><Send size={20} /></button>
       </form>
     </div>

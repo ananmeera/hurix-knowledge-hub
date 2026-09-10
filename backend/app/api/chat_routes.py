@@ -20,8 +20,18 @@ async def chat(payload: ChatRequest, db: Session = Depends(get_db), user: User =
         db.commit()
         db.refresh(session)
 
+    prior = (
+        db.query(ChatMessage)
+        .filter(ChatMessage.session_id == session.id)
+        .order_by(ChatMessage.created_at.asc())
+        .all()
+    )
+    history = [
+        {"role": row.role, "content": row.content, "sources": row.sources_json or []}
+        for row in prior[-10:]
+    ]
     db.add(ChatMessage(session_id=session.id, role="user", content=payload.message))
-    answer, sources, gap, generated_by = await answer_question(db, payload.message, user)
+    answer, sources, gap, generated_by = await answer_question(db, payload.message, user, history=history)
     assistant = ChatMessage(session_id=session.id, role="assistant", content=answer, sources_json=sources)
     db.add(assistant)
     db.commit()
