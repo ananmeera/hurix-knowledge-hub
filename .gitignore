@@ -1,0 +1,44 @@
+# Secrets and local config
+.env
+.env.*
+!.env.example
+!**/.env.example
+backend/.env
+frontend/.env
+
+# Local databases and uploaded knowledge files
+*.db
+*.sqlite
+*.sqlite3
+backend/uploads/
+uploads/
+
+# Python
+.venv/
+venv/
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+.mypy_cache/
+
+# Node
+node_modules/
+frontend/node_modules/
+frontend/dist/
+frontend/build/
+
+# Credentials and keys
+*.pem
+*.key
+*.p12
+*.pfx
+credentials.json
+*-credentials.json
+service-account*.json
+
+# Editor and OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
