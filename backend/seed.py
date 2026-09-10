@@ -1,4 +1,6 @@
+import csv
 from datetime import date
+from pathlib import Path
 from app.core.database import Base, engine, SessionLocal
 from app.models import Department, User, Document, DocumentChunk, AutomationCatalog
 from app.services.document_service import chunk_text
@@ -34,15 +36,41 @@ for title, dept_name, text in demo_docs:
         db.add(DocumentChunk(document_id=doc.id, chunk_index=i, content=c, metadata_json={"demo": True}))
     db.commit()
 
-automations = [
-    ("Monthly Reporting Bot", "Downloads and consolidates monthly reports into a standardized workbook.", "Reporting", "Report download; Excel consolidation; validation", "RPA Team", "UiPath"),
-    ("Excel Processing Automation", "Validates and processes standardized Excel workbooks using configurable business rules.", "Operations", "Excel validation; row processing; exception report", "RPA Team", "Python/UiPath"),
-    ("File Download Assistant", "Downloads approved source files from configured portals and records processing status.", "Content Operations", "Browser automation; file download; status logging", "RPA Team", "Python/Playwright"),
-    ("Automation Opportunity Intake", "Captures new automation ideas and routes them for RPA suitability assessment.", "Enterprise", "Intake; assessment routing; tracking", "RPA Team", "Workflow"),
-]
-for name, desc, function, caps, owner, tech in automations:
-    if not db.query(AutomationCatalog).filter_by(name=name).first():
-        db.add(AutomationCatalog(name=name, short_description=desc, detailed_description=desc + " DEMO / SYNTHETIC DATA.", business_function=function, capabilities=caps, owner=owner, technology=tech, status="ACTIVE", last_reviewed_date=date.today()))
+demo_bots = {
+    "Monthly Reporting Bot",
+    "Excel Processing Automation",
+    "File Download Assistant",
+    "Automation Opportunity Intake",
+    "Invoice Capture Bot",
+    "Leave Balance Sync",
+}
+for old in db.query(AutomationCatalog).filter(AutomationCatalog.name.in_(demo_bots)).all():
+    db.delete(old)
+db.commit()
+
+catalog_path = Path(__file__).resolve().parent / "sample_automations.csv"
+added = 0
+if catalog_path.exists():
+    with catalog_path.open(encoding="utf-8-sig", newline="") as handle:
+        for row in csv.DictReader(handle):
+            name = (row.get("name") or "").strip()
+            short = (row.get("short_description") or "").strip()
+            if not name or not short:
+                continue
+            if db.query(AutomationCatalog).filter_by(name=name).first():
+                continue
+            db.add(AutomationCatalog(
+                name=name,
+                short_description=short,
+                detailed_description=(row.get("detailed_description") or short).strip(),
+                business_function=(row.get("business_function") or None),
+                capabilities=(row.get("capabilities") or None),
+                owner=(row.get("owner") or None),
+                technology=(row.get("technology") or None),
+                status=(row.get("status") or "ACTIVE").strip().upper() or "ACTIVE",
+                last_reviewed_date=date.today(),
+            ))
+            added += 1
 db.commit()
 db.close()
-print("Seed complete")
+print(f"Seed complete. Added {added} bots from {catalog_path.name}.")

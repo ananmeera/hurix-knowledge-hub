@@ -6,10 +6,10 @@ import { useAuth } from '../auth/AuthContext';
 import type { ChatMessage, Source } from '../types';
 
 const prompts = [
-  'What automations are available for Excel?',
-  'How do I request a new automation?',
-  'Find the latest approved IT access process.',
-  'What onboarding knowledge is available?',
+  'Does Hurix have a CMU Platform upload BOT?',
+  'What does the Evolve Automation bot do?',
+  'How do I upload Folens Hive resources?',
+  'What bots are available for Coursera?',
 ];
 
 function renderInline(text: string) {
@@ -77,7 +77,7 @@ function SourceCard({ source }: { source: Source }) {
   return (
     <article className="source-card">
       <div className="source-meta">
-        <span className="pill">{source.type === 'automation' ? 'Automation' : 'Document'}</span>
+        <span className="pill">{source.type === 'automation' ? 'Bot' : 'Document'}</span>
         {source.version && <span>v{source.version}</span>}
       </div>
       <h3>{source.title}</h3>
@@ -87,7 +87,7 @@ function SourceCard({ source }: { source: Source }) {
         {source.last_verified_date ? ` • Verified: ${source.last_verified_date}` : ''}
       </small>
       <div className="source-links">
-        {source.href && <Link to={source.href}>{source.type === 'automation' ? 'Open catalog' : 'Open in Knowledge'}</Link>}
+        {source.href && <Link to={source.href}>{source.type === 'automation' ? 'Open Bot Catalog' : 'Open in Knowledge'}</Link>}
         {source.download_url && (
           <a href={source.download_url} target="_blank" rel="noreferrer">
             Download {source.filename || 'original file'}
@@ -146,57 +146,59 @@ export default function ChatPage() {
 
   return (
     <div className="chat-page">
-      {messages.length === 0 ? (
-        <section className="welcome">
-          <p className="eyebrow"><Sparkles size={16} />TRUSTED ORGANIZATIONAL KNOWLEDGE</p>
-          <h1>Good day, {user?.name?.split(' ')[0]}.</h1>
-          <p>What organizational knowledge can I help you find?</p>
-          <div className="prompt-grid">
-            {prompts.map((p) => <button key={p} onClick={() => send(p)}>{p}</button>)}
-          </div>
-        </section>
-      ) : (
-        <section className="conversation" aria-label="Conversation">
-          {messages.map((m, i) => (
-            <article key={i} className={`message ${m.role}`} ref={i === messages.length - 1 ? resultRef : undefined}>
-              <div className="message-label">
-                {m.role === 'user' ? 'You' : 'Knowledge Hub AI'}
-                {m.role === 'assistant' && m.generated_by === 'gemini' && <span className="gen-badge gemini">Summarized by Gemini</span>}
-                {m.role === 'assistant' && m.generated_by === 'openai' && <span className="gen-badge">Summarized by AI</span>}
-                {m.role === 'assistant' && m.generated_by === 'retrieved' && <span className="gen-badge warn">Source text only — add GEMINI_API_KEY</span>}
-                {m.role === 'assistant' && m.generated_by === 'error' && <span className="gen-badge warn">Gemini failed — showing source text</span>}
-              </div>
-              <div className="message-body">
-                {m.role === 'assistant' ? <AnswerBody content={m.content} /> : m.content}
-              </div>
-              {m.knowledge_gap && (
-                <p className="gap-note" role="status">Not enough approved knowledge was found for a confident answer.</p>
-              )}
-              {m.sources && m.sources.length > 0 && (
-                <div className="sources">
-                  <h3>Sources</h3>
-                  <div className="source-list">
-                    {m.sources.map((s, j) => <SourceCard key={`${s.type}-${s.id}-${j}`} source={s} />)}
+      <div className="chat-scroll">
+        {messages.length === 0 ? (
+          <section className="welcome">
+            <p className="eyebrow"><Sparkles size={16} />TRUSTED ORGANIZATIONAL KNOWLEDGE</p>
+            <h1>Good day, {user?.name?.split(' ')[0]}.</h1>
+            <p>What organizational knowledge can I help you find?</p>
+            <div className="prompt-grid">
+              {prompts.map((p) => <button key={p} onClick={() => send(p)}>{p}</button>)}
+            </div>
+          </section>
+        ) : (
+          <section className="conversation" aria-label="Conversation">
+            {messages.map((m, i) => (
+              <article key={i} className={`message ${m.role}`} ref={i === messages.length - 1 ? resultRef : undefined}>
+                <div className="message-label">
+                  {m.role === 'user' ? 'You' : 'Knowledge Hub AI'}
+                  {m.role === 'assistant' && m.generated_by === 'gemini' && <span className="gen-badge gemini">Summarized by Gemini</span>}
+                  {m.role === 'assistant' && m.generated_by === 'openai' && <span className="gen-badge">Summarized by AI</span>}
+                  {m.role === 'assistant' && m.generated_by === 'retrieved' && <span className="gen-badge">Retrieved from knowledge</span>}
+                  {m.role === 'assistant' && m.generated_by === 'error' && <span className="gen-badge warn">Gemini failed — showing source text</span>}
+                </div>
+                <div className="message-body">
+                  {m.role === 'assistant' ? <AnswerBody content={m.content} /> : m.content}
+                </div>
+                {m.knowledge_gap && (
+                  <p className="gap-note" role="status">Not enough approved knowledge was found for a confident answer.</p>
+                )}
+                {m.sources && m.sources.length > 0 && (
+                  <div className="sources">
+                    <h3>Sources</h3>
+                    <div className="source-list">
+                      {m.sources.map((s, j) => <SourceCard key={`${s.type}-${s.id}-${j}`} source={s} />)}
+                    </div>
                   </div>
-                </div>
-              )}
-              {m.role === 'assistant' && (
-                <div className="feedback-actions">
-                  <span>Was this useful?</span>
-                  <button onClick={() => rate(m.id, 'UP')} aria-label="Helpful"><ThumbsUp size={16} /></button>
-                  <button onClick={() => rate(m.id, 'DOWN')} aria-label="Not helpful"><ThumbsDown size={16} /></button>
-                </div>
-              )}
-            </article>
-          ))}
-        </section>
-      )}
+                )}
+                {m.role === 'assistant' && (
+                  <div className="feedback-actions">
+                    <span>Was this useful?</span>
+                    <button onClick={() => rate(m.id, 'UP')} aria-label="Helpful"><ThumbsUp size={16} /></button>
+                    <button onClick={() => rate(m.id, 'DOWN')} aria-label="Not helpful"><ThumbsDown size={16} /></button>
+                  </div>
+                )}
+              </article>
+            ))}
+          </section>
+        )}
+      </div>
       <div ref={live} className="sr-only" aria-live="polite">
         {busy ? 'Knowledge Hub AI is searching approved knowledge.' : ''}
       </div>
       <form className="composer" onSubmit={submit}>
         <label className="sr-only" htmlFor="chat-input">Ask a question</label>
-        <textarea id="chat-input" value={input} onChange={(e) => setInput(e.target.value)} placeholder="Ask about SOPs, templates, automations, project learnings…" rows={2} />
+        <textarea id="chat-input" value={input} onChange={(e) => setInput(e.target.value)} placeholder="Ask about SOPs, bots, templates, project learnings…" rows={2} />
         <button className="send-btn" disabled={busy || !input.trim()} aria-label="Send message"><Send size={20} /></button>
       </form>
     </div>

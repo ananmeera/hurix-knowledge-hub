@@ -9,7 +9,7 @@ class Settings(BaseSettings):
     google_client_secret: str = ""
     google_redirect_uri: str = "http://localhost:8000/api/auth/google/callback"
     allowed_google_domain: str = "companydomain.com"
-    llm_provider: str = "gemini"
+    llm_provider: str = "rag"
     openai_api_key: str = ""
     openai_model: str = "gpt-4.1-mini"
     gemini_api_key: str = ""

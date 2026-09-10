@@ -32,10 +32,25 @@ class DocumentDetailOut(DocumentOut):
     updated_at: datetime | None = None
 
 
+class AutomationIn(BaseModel):
+    name: str
+    short_description: str
+    detailed_description: str | None = None
+    business_function: str | None = None
+    business_problem: str | None = None
+    capabilities: str | None = None
+    input_requirements: str | None = None
+    output: str | None = None
+    owner: str | None = None
+    technology: str | None = None
+    status: str = "ACTIVE"
+
+
 class AutomationOut(BaseModel):
     id: int
     name: str
     short_description: str
+    detailed_description: str | None = None
     business_function: str | None = None
     capabilities: str | None = None
     owner: str | None = None

@@ -1,0 +1,729 @@
+﻿name,short_description,detailed_description,business_function,capabilities,owner,technology,status
+Evolve Automation,"Manual creation of Evolve pages from storyboard Word documents is time-consuming, error-prone, and inefficient. To streamline this process, there is a need for a BOT automation that can extract structured content from...","Manual creation of Evolve pages from storyboard Word documents is time-consuming, error-prone, and inefficient. To streamline this process, there is a need for a BOT automation that can extract structured content from the storyboard and auto-generate 18 Evolve templates and pages, ensuring accuracy, consistency, and reduced turnaround time.
+
+1. Upload the Storyboard input Word document and image folder to the interface; the bot will start running.
+2. Download the input file from Google Drive.
+3. Open https://universityofphoenix.evolveauthoring.com/#/courses and log in.
+4. Read the Storyboard input Word document to identify the number of Evolve templates available.
+5. Based on the Evolve template name, select the corresponding template in the Evolve platform.
+6. Populate the text into the Evolve platform.
+7. Once all Evolve templates are completed, the course link will be sent via the interface.
+8. Finally, the status will be updated in the interface.
+
+Generated 239 Evolve Ouputs",HE,Generated 239 Evolve Ouputs,harshita.gulati@hurix.com,BOT Automation - UiPath; UI Interface - Angular; API - .Net Core 6.0,ACTIVE
+D2L Automation in Client Live Environment,"Manually building 29 D2L templates from storyboard Word documents is labor-intensive and prone to inconsistencies. A BOT automation is needed to extract and map content from the storyboard to D2L templates, enabling...","Manually building 29 D2L templates from storyboard Word documents is labor-intensive and prone to inconsistencies. A BOT automation is needed to extract and map content from the storyboard to D2L templates, enabling faster, error-free creation of pages with improved consistency and reduced manual effort.
+
+1. Upload the Storyboard input Word document and image folder to the interface; the bot will start running.
+2. Download the input file from Google Drive.
+3. Open https://mycourses.csp.edu/d2l/home and log in.
+4. Read the Storyboard input Word document to identify the number of D2L templates available.
+5. Based on the D2L template name, select the corresponding template in the D2L platform.
+6. Populate the text into the D2L platform.
+7. Once all D2L templates are completed, the course link will be sent via the interface.
+8. Finally, the status will be updated in the interface.
+
+Generated 457 D2L Output",HE,Generated 457 D2L Output,ankita.sharma@hurix.com,BOT Automation - UiPath; UI Interface - Angular; API - .Net Core 6.0,ACTIVE
+WGU OA Script Automation,"Managing reviewer and client feedback for the WGU OA SB Template manually is inefficient and error-prone. To address this, a script has been developed using AppScript to automate the extraction of feedback, streamlining...","Managing reviewer and client feedback for the WGU OA SB Template manually is inefficient and error-prone. To address this, a script has been developed using AppScript to automate the extraction of feedback, streamlining the review process. Additionally, another script has been created to auto-populate the template using item codes and counts, significantly reducing manual data entry, improving accuracy, and accelerating content production.
+
+1. Extraction Review and Client Feedbacks from Google Doc to Google Sheet
+2. Auto generate document templates based on Item Code and Count
+
+Bot Handover to Team",HE,Bot Handover to Team,sandeep.dagar@hurix.com,Apps Script,ACTIVE
+LRPS,"Validating content and URLs for multiple asset providers on the LRPS site is a manual and time-consuming process. It involves comparing links and content, checking for invalid or broken URLs, and monitoring page loading...","Validating content and URLs for multiple asset providers on the LRPS site is a manual and time-consuming process. It involves comparing links and content, checking for invalid or broken URLs, and monitoring page loading times—making the task inefficient and prone to errors when performed at scale. An automated solution is required to loop through asset provider data in an Excel sheet, navigate the LRPS site, validate URLs and on-page content, and detect slow-loading or invalid links—ensuring accuracy, faster validation, and improved content quality control.
+
+Looping through all asset providers in excel sheet and navigating through LRPS site for comaparing link and content validation
+Detecting loading time and invalid urls
+
+Bot Handover to Team",HE,Bot Handover to Team,murugan.gopal@hurix.com,Java Selenium,ACTIVE
+GCP BOT,"Manually processing text-to-speech requests from Excel files stored in a cloud environment is time-consuming, error-prone, and lacks scalability. The process involves validating voice names and requester IDs, generating...","Manually processing text-to-speech requests from Excel files stored in a cloud environment is time-consuming, error-prone, and lacks scalability. The process involves validating voice names and requester IDs, generating audio outputs, and managing communication—all of which are repetitive and prone to delays. An automated solution is required to monitor the input folder at regular intervals, validate data against a master reference, generate audio using an API, manage errors through automated notifications, and deliver the final audio assets—ensuring accuracy, efficiency, and timely delivery at scale.
+
+1. Go to the GCP Portal. 
+2. Check the input folder container at one-hour intervals. 
+3. Download the input Excel file from the container. 
+4. Validate the Voice Name and Request ID in the input Excel file against the Language Master sheet. 
+5. If the Voice Name validation fails, an email will be sent to the Requestor ID. 
+6. If the Requestor ID validation fails, an email will be sent to the RPA team. 
+7. If validation passes, copy the ""Input Text"" from each row of the table and generate audio using the API. 
+8. The output audio files will be zipped and uploaded to the GCP Output container. 
+9. Share the output path link with the Requestor ID via email. 
+10. Repeat this process for every Excel document in the Azure input container.
+
+Generated 360 output files",,Generated 360 output files,deepti.inamdar@hurix.com,UiPath; Python,ACTIVE
+OEX QTI XML generation,"Manually converting questions from Word documents into XML format and packaging them for delivery is a time-consuming and error-prone process, especially when handling large volumes of content. An automated solution is...","Manually converting questions from Word documents into XML format and packaging them for delivery is a time-consuming and error-prone process, especially when handling large volumes of content. An automated solution is needed to read Word documents from a specified location, extract individual questions, convert each question into the required XML structure, and compile the XML files into a ZIP package—ensuring efficiency, accuracy, and streamlined content transformation for digital platforms.
+
+1. Read the word document from input location.
+2. Read the individual question from the document.
+3. Convert each and every question as XML format.
+4. Comprase the package as zip file.",HE,1. Read the word document from input location. 2. Read the individual question from the document. 3. Convert each and every question as XML format. 4. Comprase...,Yogesh Hankre,RPA,ACTIVE
+Storyline Automation,"Creating eLearning courses in Articulate Storyline 360 from storyboard PPTX files and corresponding audio assets is a manual, time-consuming process prone to inconsistencies. It involves identifying templates, entering...","Creating eLearning courses in Articulate Storyline 360 from storyboard PPTX files and corresponding audio assets is a manual, time-consuming process prone to inconsistencies. It involves identifying templates, entering content, inserting audio, and updating progress—all of which require significant effort and coordination. To streamline and scale content production, an automated solution is needed to read storyboard files, map templates, populate content and audio in Articulate Storyline 360, and manage delivery and status updates—ensuring faster, consistent, and error-free course creation.
+
+1. Upload the Storyboard PPTX document and Audio folder to the interface; the bot will start running. 
+2. Download the input file from Google Drive. 
+3. Open Articulate Storyline 360 and log in. 
+4. Read the slides in the Storyboard PPTX document, specifically the notes section, to identify the template names. 
+5. Based on the identified template name, select the corresponding template in Articulate Storyline 360. 
+6. Populate the text and insert the audio into the appropriate sections of Articulate Storyline 360. 
+7. Once all templates are completed, the course link will be sent via the interface. 
+8. Finally, the status will be updated in the interface.
+
+Generated 85 Articulate files",HL,Generated 85 Articulate files,amrita.choudhury@hurix.com,BOT Automation - UiPath; UI Interface - Angular; API - .Net Core 6.0,ACTIVE
+Colibri Rise Automation,"Manually creating courses in Articulate Rise from Word-based storyboard documents is time-consuming, repetitive, and prone to formatting inconsistencies. The process of identifying style templates, entering text and...","Manually creating courses in Articulate Rise from Word-based storyboard documents is time-consuming, repetitive, and prone to formatting inconsistencies. The process of identifying style templates, entering text and images, and generating course links requires significant manual effort. An automated solution is needed to extract content and style information from storyboard documents, populate the appropriate templates in the Rise platform, and generate the final course link—ensuring efficiency, consistency, and scalability in course development.
+
+1. Open the input file from the input folder. 
+2. Go to https://rise.articulate.com/ and log in. 
+3. Read the storyboard input Word document to identify the style. 
+4. Based on the style template name, select the corresponding template in the Rise platform. 
+5. Populate the text and images into the Rise platform. 
+6. Once all templates are completed, save the course link in a text file.
+
+Generated 349 output files",HPT,Generated 349 output files,S.Ravi,BOT Automation - UIPath; BOT machine deployed in HPT Team,ACTIVE
+Media Bank,"Manually extracting Viddler video codes from courses on the MHE website is a repetitive and time-consuming task that increases the risk of oversight and data inconsistency. To streamline this process, an automated...","Manually extracting Viddler video codes from courses on the MHE website is a repetitive and time-consuming task that increases the risk of oversight and data inconsistency. To streamline this process, an automated solution is required to log into the MHE website, navigate through assigned course URLs, extract Viddler codes systematically, and record them in an Excel sheet—ensuring accuracy, efficiency, and scalability in video asset management.
+
+1. Open the MHE website and log in. 
+2. Assign the course URL to the bot and initiate the process. 
+3. Navigate through the course and extract the Viddler code one by one. 
+4. Write the extracted Viddler codes into an Excel sheet. 
+5. Save the Excel file in the output folder.
+
+Bot Handover to Team",HPT,Bot Handover to Team,venkatasubramanian.narasimhan@hurix.com,UiPath,ACTIVE
+SRT to Text,SRT subtitle files contain timestamps and formatting data that are unnecessary for certain content processing tasks. Manually cleaning these files to extract only the spoken text is time-consuming and error-prone. An...,"SRT subtitle files contain timestamps and formatting data that are unnecessary for certain content processing tasks. Manually cleaning these files to extract only the spoken text is time-consuming and error-prone. An automated solution is needed to read SRT files, remove unwanted elements such as timestamps and sequence numbers, extract the clean text, and save it in the output folder—ensuring efficiency, consistency, and readiness for further content use.
+
+Read the SRT files, remove unwanted text such as timestamps, extract the remaining text, and save it in the output folder.
+
+Bot Handover to Team",HPT,Bot Handover to Team,venkatasubramanian.narasimhan@hurix.com,UiPath,ACTIVE
+MSVGo Automation,"Manually extracting English audio from videos and converting it into multiple languages is a time-intensive and complex task, often involving multiple tools and risking inconsistency in quality. To streamline this...","Manually extracting English audio from videos and converting it into multiple languages is a time-intensive and complex task, often involving multiple tools and risking inconsistency in quality. To streamline this workflow, an automated solution is required to extract English audio from video files, convert it to text, translate the content into target languages, and regenerate audio in those languages—ensuring accuracy, efficiency, and scalability in multilingual content production.
+
+Extraction of english audio from Video and conversion to other languages",MSVGo,Extraction of english audio from Video and conversion to other languages,hari.bobhate@hurix.com,UiPath; GCP,ACTIVE
+Noise Removal,MP4 video files often contain background noise that affects audio clarity and user experience. Manually cleaning each file is time-consuming and not scalable for large volumes. An automated solution is needed to process...,"MP4 video files often contain background noise that affects audio clarity and user experience. Manually cleaning each file is time-consuming and not scalable for large volumes. An automated solution is needed to process MP4 files from an input folder, remove background noise using audio enhancement techniques, and save the cleaned videos to an output folder—ensuring consistent quality and efficient media processing.
+
+Open each MP4 file from the input folder, remove the background noise, and save the updated video files in the output folder.
+
+Bot Handover to Team",HPT,Bot Handover to Team,ramganesh.bhaskaran@hurix.com,UiPath,ACTIVE
+Bajaj,"Manually searching, extracting, and aligning content based on keywords and titles is time-consuming and inconsistent, especially when large volumes of information are involved. To improve efficiency and content quality...","Manually searching, extracting, and aligning content based on keywords and titles is time-consuming and inconsistent, especially when large volumes of information are involved. To improve efficiency and content quality, an automated solution is needed that leverages Python and ChatGPT to extract relevant information based on specified keywords and titles, then align and paraphrase the content to ensure coherence, originality, and contextual relevance.
+
+Content extraction based on Keywords and Title using Python and ChatGPT
+Alignment and paraphrase of extracted content
+
+Workid at Client End",,Workid at Client End,Direct Client,Microsoft Power Automate; Python + ChatGPT,ACTIVE
+EZTest_XML,"Manually extracting Viddler video codes from XML files and checking for closed caption (CC) availability is time-consuming and prone to oversight. An automated solution is needed to read XML input files, extract Viddler...","Manually extracting Viddler video codes from XML files and checking for closed caption (CC) availability is time-consuming and prone to oversight. An automated solution is needed to read XML input files, extract Viddler codes, access the corresponding video URLs, verify the presence of closed captions, and update the status in an Excel sheet—ensuring accurate tracking, improved efficiency, and streamlined video accessibility validation.
+
+1. Read the XML file from the input and extract the Viddler code.
+2. Use the video URL to open the video files and monitor if closed captions (CC) are available and status updated in excel sheet.
+
+Bot Handover to Team",HPT,Bot Handover to Team,venkatasubramanian.narasimhan@hurix.com,UiPath,ACTIVE
+Engrade & MHE Automation,"Manually removing or modifying State Standards from online forms on the Engrade website is repetitive, time-consuming, and prone to human error. To ensure consistency and efficiency, an automated solution is needed to...","Manually removing or modifying State Standards from online forms on the Engrade website is repetitive, time-consuming, and prone to human error. To ensure consistency and efficiency, an automated solution is needed to access the Engrade platform, locate the relevant forms, and accurately remove or update State Standard entries—streamlining the process and reducing manual intervention.
+
+Removal and modification of State Standard from Engrade website online form
+
+Bot Handover to Team",HPT,Bot Handover to Team,chandra.pk@hurix.com,UiPath,ACTIVE
+Inifinity Learn Automation,"Manually adding watermarks to videos and extracting images from websites are repetitive and time-intensive tasks, especially when dealing with multiple assets. To streamline these workflows, an automated solution is...","Manually adding watermarks to videos and extracting images from websites are repetitive and time-intensive tasks, especially when dealing with multiple assets. To streamline these workflows, an automated solution is required to use FFmpeg for reading MP4 video files and applying logo-based watermarks, as well as to extract images from specified websites—ensuring efficiency, consistency, and reduced manual effort in media processing and content collection.
+
+Read the input MP4 file and logo PNG. Using FFmpeg, we add a watermark to the video.
+Extraction of Images from website
+
+Bot Handover to Team",HPT,Bot Handover to Team,ramganesh.bhaskaran@hurix.com,UiPath,ACTIVE
+Kaplan_CampusView,"Manually adding watermarks to videos and extracting images from websites are repetitive and time-intensive tasks, especially when dealing with multiple assets. To streamline these workflows, an automated solution is...","Manually adding watermarks to videos and extracting images from websites are repetitive and time-intensive tasks, especially when dealing with multiple assets. To streamline these workflows, an automated solution is required to use FFmpeg for reading MP4 video files and applying logo-based watermarks, as well as to extract images from specified websites—ensuring efficiency, consistency, and reduced manual effort in media processing and content collection.",,,Direct client,UiPath,ACTIVE
+ffmpeg conversion,"Legacy media formats like FLV and SWF are no longer widely supported, making content access and compatibility challenging. Manually converting these files to modern formats is inefficient and error-prone. An automated...","Legacy media formats like FLV and SWF are no longer widely supported, making content access and compatibility challenging. Manually converting these files to modern formats is inefficient and error-prone. An automated solution is needed to transform FLV files to MP4 and SWF files to MP3 using FFmpeg, ensuring broader compatibility, improved playback support, and streamlined media migration.
+
+Transform FLV files to MP4 and SWF files to MP3 using FFmpeg conversion.",,Transform FLV files to MP4 and SWF files to MP3 using FFmpeg conversion.,deepti.inamdar@hurix.com,UiPath,ACTIVE
+Mp4_To_Transcript_Thumbnail,"Manually capturing thumbnail images from the final moments of videos is time-consuming and inconsistent, especially across large video libraries. To ensure uniformity and efficiency, an automated solution is required to...","Manually capturing thumbnail images from the final moments of videos is time-consuming and inconsistent, especially across large video libraries. To ensure uniformity and efficiency, an automated solution is required to extract thumbnail images from the last two seconds of each video—providing a standardized visual preview for use in catalogs, platforms, or video players.
+
+Creating thumbnail image from the video for last two seconds
+
+Bot Handover to Team",HPT,Bot Handover to Team,ramganesh.bhaskaran@hurix.com,UiPath,ACTIVE
+Word to Latex Questions,"Extracting questions from Word documents and transferring them into Excel, especially when involving LaTeX-formatted mathematical content, is a manual and error-prone process. To ensure accuracy and efficiency, an...","Extracting questions from Word documents and transferring them into Excel, especially when involving LaTeX-formatted mathematical content, is a manual and error-prone process. To ensure accuracy and efficiency, an automated solution is required to extract questions from Word files, preserve or convert embedded LaTeX code, and populate the structured content into Excel—streamlining question processing for assessment development and reducing manual workload.
+
+Extraction of question from word to Excel with Latex code
+
+No Data Available",MSVGo,No Data Available,,UiPath,ACTIVE
+SF/Word to Captivate,"Manually transforming content from SuccessFactors or Word documents into Captivate-compatible XML format is complex, time-consuming, and prone to structural errors. To streamline eLearning content migration and ensure...","Manually transforming content from SuccessFactors or Word documents into Captivate-compatible XML format is complex, time-consuming, and prone to structural errors. To streamline eLearning content migration and ensure accuracy, an automated solution is needed to convert structured content from SuccessFactors exports or Word-based storyboards into Captivate XML—facilitating faster content integration, reducing manual effort, and ensuring compatibility with Adobe Captivate workflows.
+
+Transformation of SF or Word to Captivate XML
+
+No Data Available",,No Data Available,,"VBSCript, PERL",ACTIVE
+Excel2ePub_Creation,"HTML content embedded within Excel documents is not readily usable for digital publishing, and manually converting this content into EPUB format is inefficient and error-prone. To streamline the workflow, an automated...","HTML content embedded within Excel documents is not readily usable for digital publishing, and manually converting this content into EPUB format is inefficient and error-prone. To streamline the workflow, an automated solution is needed to extract HTML content from Excel cells, structure it appropriately, and transform it into a valid EPUB package—ensuring consistent formatting, improved efficiency, and compatibility with eReaders and distribution platforms.
+
+Transformation of HTML content inside excel docuemnt into Epub
+
+No Data Available",PDG,No Data Available,moulaali.choudhri@kitaboo.com,PERL,ACTIVE
+Html2ePub_Creation,"Many websites still host content in the outdated EPUB 2 format, which lacks support for modern accessibility, interactivity, and structural standards. Manually converting EPUB 2 files to EPUB 3 involves multiple cleanup...","Many websites still host content in the outdated EPUB 2 format, which lacks support for modern accessibility, interactivity, and structural standards. Manually converting EPUB 2 files to EPUB 3 involves multiple cleanup and transformation steps, making the process time-consuming and error-prone. An automated solution is required to extract EPUB 2 content from websites, perform necessary cleanups (e.g., structural correction, removal of deprecated tags), and transform the content into EPUB 3—ensuring enhanced compatibility, accessibility, and compliance with modern publishing standards.
+
+Conversion of Epub 2 from website, performing cleanup and trasnforming to Epub3
+
+No Data Available",PDG,No Data Available,moulaali.choudhri@kitaboo.com,PERL,ACTIVE
+Grammarly BOT,Generating grammar and writing quality reports using Grammarly is a manual process that involves copying content from Word documents and reviewing results within the online interface. This workflow is time-consuming and...,"Generating grammar and writing quality reports using Grammarly is a manual process that involves copying content from Word documents and reviewing results within the online interface. This workflow is time-consuming and inconsistent, especially when handling large volumes of content. An automated solution is required to upload Word documents through an interface, extract and paste the content into the Grammarly web application, and generate detailed reports—streamlining the review process, ensuring consistency, and improving content quality at scale.
+
+Generating report from Grammarly online application by pasting the content from word document upload through interface
+
+No Data Available",HL/HE,No Data Available,,UiPath,ACTIVE
+Numerade Video,"Processing video and audio files manually—starting from downloading, checking for audio quality, editing, and formatting—is time-consuming and prone to errors. Specifically, extracting audio, detecting background noise...","Processing video and audio files manually—starting from downloading, checking for audio quality, editing, and formatting—is time-consuming and prone to errors. Specifically, extracting audio, detecting background noise, inserting pauses, and resizing video dimensions to client specifications require multiple steps and tools. An automated solution is needed to download video files from links in an Excel sheet, analyze and enhance the audio using FFmpeg, insert a 2-second break at the end, and update video dimensions—ensuring efficiency, consistency, and adherence to client requirements.
+
+1. Download the video file using the link available in the excel sheet.
+2. extract the audio file and check any background noise present in the audio file using ffmpeg command in the command line prompt.
+3. adding 2 seconds break time at the end of the audio file.
+4. update the video dimension as per the client requirement.
+
+No Data Available",HPT,No Data Available,ramganesh.bhaskaran@hurix.com,UiPath,ACTIVE
+Vimeo URL,"Manually retrieving video duration from Vimeo URLs listed in Excel sheets is inefficient and prone to inconsistencies, especially when dealing with large datasets. To streamline this process, an automated solution is...","Manually retrieving video duration from Vimeo URLs listed in Excel sheets is inefficient and prone to inconsistencies, especially when dealing with large datasets. To streamline this process, an automated solution is needed to read Vimeo URLs from an Excel file, extract the time duration of each video, and update the corresponding cell—ensuring accurate metadata collection and saving significant manual effort.
+
+1. Read the excel containing the video url.
+2. open the video online using the supplied credentials.
+3. Extracting time duration from the video.
+4. update the time duration in the excel.
+
+No Data Available",MSVGo,No Data Available,,UiPath,ACTIVE
+Equalsense B2B / B2C API Checker,"Manually testing B2B and B2C API endpoints using Postman involves repetitive steps such as navigating through nodes, fetching OAuth tokens, updating headers, sending requests, and logging responses. This process is...","Manually testing B2B and B2C API endpoints using Postman involves repetitive steps such as navigating through nodes, fetching OAuth tokens, updating headers, sending requests, and logging responses. This process is time-consuming, error-prone, and inefficient for large sets of APIs. An automated solution is needed to authenticate via OAuth, iterate through all API nodes, send requests, and log the status of each API in the corresponding row of an Excel sheet—ensuring accuracy, efficiency, and streamlined API validation.
+
+1. Open the B2B, B2C endpoint URL in the postman.
+2. went through all the nodes available in the postman
+3. get the oAuth token from the authrorization tab
+4. use that token in the headers tab
+5. Click send button to check the status of that API
+6. Log the status in excel in the appropriate line of node entry
+
+No Data Available",HT,No Data Available,Ravichandran J,UiPath,ACTIVE
+OLC Atoms List,"Automate the extraction of chapter details from the MHE (McGraw Hill Education) website using ISBNs listed in an input Excel file. The solution should log into the MHE website, retrieve the Atoms list for each ISBN from...","Automate the extraction of chapter details from the MHE (McGraw Hill Education) website using ISBNs listed in an input Excel file. The solution should log into the MHE website, retrieve the Atoms list for each ISBN from the Instructor Edition link, traverse through the tree nodes, expand the second parent node to extract chapter details, and write the extracted node text into the Excel sheet. This process should repeat for each row in the input Excel file.
+
+1. Singin to MHE website
+ 2. Read the ISBN from the input excel
+ 3. Get Atoms list for the ISBN from the Instrcutor Edition link
+ 4. Traverse through all the tree nodes of Instructor Edition
+ 5. Check for chapters under second parent node
+ 6. Get the Node text by expanding elipse and write it in excel sheet
+ 7. Repeat for each row in input excel
+
+Bot Handover to Team",HPT,Bot Handover to Team,Venkat Subramaniam,UiPath,ACTIVE
+eBook Download_Bento,"The client needs to automate the process of downloading eBooks from the MHE website using ISBNs listed in an Excel sheet. The current manual process involves signing into the MHE website, navigating to the Bento...","The client needs to automate the process of downloading eBooks from the MHE website using ISBNs listed in an Excel sheet. The current manual process involves signing into the MHE website, navigating to the Bento Dashboard, searching for each ISBN, downloading the corresponding eBook, and updating the status in the Excel sheet. This process is time-consuming and prone to human error. Automating this workflow will improve efficiency, accuracy, and reduce manual effort.
+
+1. Signin to MHE website
+ 2. Navigate to Bento Dashboard
+ 3. Read the ISBN from the input excel
+ 4. Search the ISBN in Bento
+ 5. Download the corresponding eBook from the link
+ 6. Write the status in the excel sheet
+ 7. Repeat for each row in excel
+
+Bot Handover to Team",HPT,Bot Handover to Team,Venkat Subramaniam,UiPath,ACTIVE
+MHE_Assess (Wonders Assessment Tagging),"Automating the process of updating assessment benchmarks on the MHE website is critical to improving efficiency and accuracy. The task involves reading assessment folder names from an Excel file, locating and opening...","Automating the process of updating assessment benchmarks on the MHE website is critical to improving efficiency and accuracy. The task involves reading assessment folder names from an Excel file, locating and opening the corresponding folders on the MHE website, and accessing individual assessments and their associated question metadata files. The system must update the Benchmark field based on the standard specified in the Excel sheet's Georgia and Indonesia columns, aligning the updates with the appropriate Grade level.
+
+1. Read the assesment folder name from excel
+ 2. Open MHE website
+ 3. Find the assessment folder name and click
+ 4. Go through all the assessment one by one
+ 5. Each assessment have multiple questions
+ 6. Each questions have question metadata file
+ 7. Click on the corresponding question and edit the Benchmark as mentioned in the excel sheet standard (CCSS...) refer the standard sheet Georgia and Indonesia column standards, and updated in the Benchmark based upon the Grade
+
+Bot Handover to Team",HPT,Bot Handover to Team,Ravi S (Subramani),UiPath,ACTIVE
+EZ Test reports from the Prod (ISBN-521),"The manual process of verifying ISBN availability across multiple categories on the MHE EZT content website is time-consuming and prone to human error. The task involves opening the MHE website, reading ISBNs from an...","The manual process of verifying ISBN availability across multiple categories on the MHE EZT content website is time-consuming and prone to human error. The task involves opening the MHE website, reading ISBNs from an Excel sheet, and searching through three specific categories: BEC, HSSL, and SEM. If a match is found, generating detailed reports, including a Content Accessibility Report and a Consumption Report, adds further complexity. Automating this process will reduce time, improve accuracy, and ensure timely and consistent reporting, enhancing overall efficiency and data reliability in content accessibility and consumption tracking.
+
+1. Open MHE website
+ 2. Read the ISBN from excel sheet
+ 3. Go to MHE EZT content website
+ 4. Go through the 3 categories (BEC, HSSL,SEM)
+ 5. If ISBN found in any one category then generate the following report
+ Content Accessability report, Consumption report
+
+Bot Handover to Team",HPT,Bot Handover to Team,Venkat Subramaniam,UiPath,ACTIVE
+OLC - Database sheet,"Retrieving metadata for multiple ISBNs from the MHE website manually is a repetitive and time-consuming task that increases the risk of data entry errors and delays. To streamline this process, an automated solution is...","Retrieving metadata for multiple ISBNs from the MHE website manually is a repetitive and time-consuming task that increases the risk of data entry errors and delays. To streamline this process, an automated solution is required to sign in to the MHE website, read ISBNs from an input Excel file, fetch corresponding metadata, and populate the information back into the Excel sheet—ensuring accuracy, efficiency, and scalability in metadata management.
+
+1. Singin to MHE website
+ 2. Read the ISBN from the input excel
+ 3. Get all the metadata informatio for the ISBN
+ 4. Write in the excel against the ISBN
+ 5. Repeat for all ISBN in the Excel
+
+Bot Handover to Team",HPT,Bot Handover to Team,Venkat Subramaniam,UiPath,ACTIVE
+CL Studio Production Server,"Uploading an EPUB to the CLStudio platform involves multiple manual steps, including adding metadata, uploading a cover image, and attaching audio files. This process is time-consuming and prone to inconsistencies. An...","Uploading an EPUB to the CLStudio platform involves multiple manual steps, including adding metadata, uploading a cover image, and attaching audio files. This process is time-consuming and prone to inconsistencies. An automated solution is required to streamline EPUB uploads by programmatically adding required metadata, setting the cover image, and linking associated audio files—ensuring accuracy, efficiency, and consistency across digital publishing workflows.
+
+1. Login to https://clstudio.kitaboo.com
+ 2. Open the textsummary.xlsx
+ 3. Read the Audio name, Description for multiple Languages and 4. reference ID for the ePub details
+ 4. Upload the audio file and copy the descriptions to multiple language text box and author image icon, upload the epub and thumbnail image and save
+
+Bot Handover to Team",HPT,Bot Handover to Team,Venkatraman E,UiPath,ACTIVE
+CL Studio Json file creation using Excel,"Linking glossary items in an EPUB package with tooltips requires assigning unique IDs to each term, which is time-consuming and error-prone when done manually. An automated solution is needed to populate IDs for...","Linking glossary items in an EPUB package with tooltips requires assigning unique IDs to each term, which is time-consuming and error-prone when done manually. An automated solution is needed to populate IDs for glossary items based on data from an Excel sheet and apply these IDs correctly within the EPUB package for tooltip linking. This will ensure consistency, improve navigation and user experience, and streamline the EPUB production process.
+
+1. Generate the GlossaryData.js (JSON) file from the metadata mentioned in the GlossarySample.xlsx
+ 2. Generate the cross reference id from the xhtml file and link the JSON
+
+Bot Handover to Team",HPT,Bot Handover to Team,Venkatraman E,UiPath,ACTIVE
+OUP Kitaboo - eBook Archive to production,"Manually moving files from the ""Archive"" to ""In Progress"" section in the Kitaboo platform based on ISBNs listed in an Excel sheet is inefficient and prone to human error. An automated solution is needed to read ISBNs...","Manually moving files from the ""Archive"" to ""In Progress"" section in the Kitaboo platform based on ISBNs listed in an Excel sheet is inefficient and prone to human error. An automated solution is needed to read ISBNs from the Excel sheet, locate the corresponding files in Kitaboo, and move them to the ""In Progress"" section—ensuring accuracy, saving time, and streamlining the content management workflow.
+
+1. Signin to Kitaboo
+ 2. Read ISBN from Input Excel Sheet 
+ 3. Search for ISBN in Archive
+ 4. Move one chapter for the ISBN to the InProgress status
+ 5. Repeat for other chapters
+ 6. Repeat for other ISBNs
+
+Bot Handover to Team",HPT,Bot Handover to Team,Ravi S (Karunakaran),UiPath,ACTIVE
+ElevenLabs - Text to speech_PPTX,"Manually generating audio files from voice-over (VO) text embedded in Powerpoint is time-consuming and lacks scalability. To optimize this process, an automated solution is needed to extract VO content from the Word...","Manually generating audio files from voice-over (VO) text embedded in Powerpoint is time-consuming and lacks scalability. To optimize this process, an automated solution is needed to extract VO content from the Word document and convert it into high-quality audio using Eleven Labs Text-to-Speech. This approach ensures consistent voice output, reduces manual effort, and accelerates the production of audio assets for eLearning and multimedia content.
+
+1. Goto Azure Portal
+ 2. Check for Input folder container for every one hour interval
+ 3. Download Input PPT from the container
+ 4. Validate Voice Name and Request ID from input PPT again language Master sheet.
+ 5. If Voice Name validation fails email will be sent to the requestor id
+ 6. If Requestor ID validation fails email will ne sent to RPA team
+ 7. If validation passes, copy the ""Audio Transcript"" from each slide and generate audio using Elevenlabs API
+ 8. Ouput audios will zipped and uploaded to Azure Output folder 
+ 9. Share the ouput path link to requestor id through email
+ 10. Repeat for every ppt in the input folder
+
+Generated 48 ouput files",HL,Generated 48 ouput files,Khushbu Pandey,UiPath,ACTIVE
+ElevenLabs_Text to speech_Word,"Manually generating audio files from voice-over (VO) text embedded in Word documents is time-consuming and lacks scalability. To optimize this process, an automated solution is needed to extract VO content from the Word...","Manually generating audio files from voice-over (VO) text embedded in Word documents is time-consuming and lacks scalability. To optimize this process, an automated solution is needed to extract VO content from the Word document and convert it into high-quality audio using Eleven Labs Text-to-Speech. This approach ensures consistent voice output, reduces manual effort, and accelerates the production of audio assets for eLearning and multimedia content.
+
+1. Goto Azure Portal
+ 2. Check for Input folder container for every one hour interval
+ 3. Download Input word document from the container
+ 4. Validate Voice Name and Request ID from input Word again language Master sheet.
+ 5. If Voice Name validation fails email will be sent to the requestor id
+ 6. If Requestor ID validation fails email will ne sent to RPA team
+ 7. If validation passes, copy the ""Narration"" text from each row of the table and generate audio using Elevenlabs API
+ 8. Ouput audios will zipped and uploaded to Azure Output contaner
+ 9. Share the ouput path link to requestor id through email
+ 10. Repeat for every word document in the azure input container
+
+Generated 26 output files",HL,Generated 26 output files,Khushbu Pandey,UiPath,ACTIVE
+Azure_Text to speech_Word,"Generating audio files manually from voice-over (VO) text in Word documents is a time-intensive and repetitive task. To enhance efficiency and consistency, an automated solution is required to extract VO content from...","Generating audio files manually from voice-over (VO) text in Word documents is a time-intensive and repetitive task. To enhance efficiency and consistency, an automated solution is required to extract VO content from the Word document and convert it into high-quality audio using Microsoft Azure Text-to-Speech. This will streamline audio production, ensure standardized voice output, and significantly reduce manual workload in content development workflows.
+
+1. Goto Azure Portal
+ 2. Check for Input folder container for every one hour interval
+ 3. Download Input word document from the container
+ 4. Validate Voice Name and Request ID from input Word again language Master sheet.
+ 5. If Voice Name validation fails email will be sent to the requestor id
+ 6. If Requestor ID validation fails email will ne sent to RPA team
+ 7. If validation passes, copy the ""voice name"" and ""Narration"" from each row of the table and generate audio using speech.microsoft.com 
+ 8. Create SSML file using voice name and narration from the input and generate the .mp3 audio using export option
+ 8. Ouput audios will zipped and uploaded to Azure Output contaner
+ 9. Share the ouput path link to requestor id through email
+ 10. Repeat for every word document in the azure input container
+
+Generated 21 output files",HL,Generated 21 output files,Khushbu Pandey,UiPath,ACTIVE
+ElevenLabs - Text to speech_Excel,"Generating audio files manually from voice-over (VO) text listed in Excel sheets is time-consuming and inefficient. To streamline this process, an automated solution is required to read VO text from the Excel sheet and...","Generating audio files manually from voice-over (VO) text listed in Excel sheets is time-consuming and inefficient. To streamline this process, an automated solution is required to read VO text from the Excel sheet and generate high-quality audio using Eleven Labs Text-to-Speech. This will ensure consistent voice output, faster production of audio assets, and improved scalability for content development workflows.
+
+1. Goto Azure Portal
+ 2. Check for Input folder container for every one hour interval
+ 3. Download Input exel file from the container
+ 4. Validate Voice Name and Request ID from input excel again language Master sheet.
+ 5. If Voice Name validation fails email will be sent to the requestor id
+ 6. If Requestor ID validation fails email will ne sent to RPA team
+ 7. If validation passes, copy the ""Input Text"" text from each row of the table and generate audio using Elevenlabs API
+ 8. Ouput audios will zipped and uploaded to Azure Output contaner
+ 9. Share the ouput path link to requestor id through email
+ 10. Repeat for every word document in the azure input container
+
+Generated 4 output files",HL,Generated 4 output files,Khushbu Pandey,UiPath,ACTIVE
+DAMS - Image Extraction,"Storyboard Word documents often contain a mix of embedded images and Getty image references, requiring careful extraction and tagging to ensure accessibility compliance. Manually extracting these images and writing alt...","Storyboard Word documents often contain a mix of embedded images and Getty image references, requiring careful extraction and tagging to ensure accessibility compliance. Manually extracting these images and writing alt text is time-consuming and inconsistent. An automated solution is needed to extract both embedded and referenced Getty images from the storyboard, generate meaningful alt text using Equalsense, and organize the image assets along with their metadata and alt text—streamlining accessibility, improving content quality, and reducing manual effort.
+
+1. Downloading the word document from google.
+ 2. Extracting the COS ID from the word document name.
+ 3. opening the word document and get the image count.
+ 4. checking the image width and height.
+ 5. extracting the images from word document.
+ 6. splitting each content/lesson/chapter from word document for each image and image naming conversion is created. (Section, Lesson, Microunit and title).
+ 7. uploading the file to google drive.
+
+Generated 10 output file",HE,Generated 10 output file,Kanchan Shine,UiPath,ACTIVE
+DAMS - Metadata Extraction,"Extracting DAMS metadata from Word templates and manually retrieving corresponding Getty Images metadata is inefficient and prone to errors. To streamline this workflow, an automated solution is needed to extract...","Extracting DAMS metadata from Word templates and manually retrieving corresponding Getty Images metadata is inefficient and prone to errors. To streamline this workflow, an automated solution is needed to extract metadata from the Word document, search for matching Getty Images, retrieve their meta information (such as title, description, keywords, and licensing), and populate this data into an Excel sheet—ensuring accuracy, consistency, and reduced manual effort in digital asset management.
+
+1. Downloading the ""Equal sense alt-text"" CSV from google.
+ 2. Using image naming and splitting the image name and alt text csv content COS sheet is created as per images (Banner, Getty, Complex images).
+ 3. Banner/Complex - Check for Banner in the image naming and populate required fields in the DAMS Sheet
+ 4. Getty Imae - Check for Getty image form image name and fetch the required fields from Getty URL and populate it in the DAMS Sheet
+
+No live data added",HE,No live data added,Kanchan Shine,UiPath,ACTIVE
+FNF Vidieo Creation Automation,"Creating videos manually from storyboard templates involves combining images and generating voice-over (VO) audio, which is time-consuming and resource-intensive. To streamline this process, an automated solution is...","Creating videos manually from storyboard templates involves combining images and generating voice-over (VO) audio, which is time-consuming and resource-intensive. To streamline this process, an automated solution is needed to read storyboard content, compile relevant images, generate audio from VO text using text-to-speech, and assemble them into cohesive video outputs—ensuring faster production, consistency, and scalability in eLearning content creation.
+
+1. Image Creation using NightCafe
+ 2. Audio Creation using Azure Speech Synthesis
+ 3. Chapter-wise Audo Merge including bgm
+ 4. Stacking Images and Audio using Adobe Express
+ 5. Creating timestamp details along with character action in spreadsheet
+ 6. Google Drive Upload and Download
+ 7. Interface creation & Testing
+ 8. Generating caption using Adobe Express
+
+Generated 25 ouput files",HE,Generated 25 ouput files,Yogesh Hankre,UiPath,ACTIVE
+Image description update in Gdrive images,"Images stored in Google Drive often lack descriptive metadata, making them difficult to search and organize. Manually adding keywords is inefficient and unscalable. To improve searchability and content management, an...","Images stored in Google Drive often lack descriptive metadata, making them difficult to search and organize. Manually adding keywords is inefficient and unscalable. To improve searchability and content management, an automated solution is needed to analyze images, generate relevant keywords using image recognition or metadata extraction, and tag each image in Google Drive accordingly.
+
+1. read the description from excel.
+2. open the G-drive URL in browser.
+3. find the image by giving the image name in the search box.
+4. Open the detail page for that particular image.
+5. Fill the missing description from the excel sheet
+
+No live data added",HE,No live data added,Vijayaragavan,UiPath,ACTIVE
+Video Transcript extraction using Azure,"Manually transcribing video files is time-consuming and prone to inaccuracies. To streamline this process, an automated solution is required to extract accurate transcripts from video files using Microsoft Azure...","Manually transcribing video files is time-consuming and prone to inaccuracies. To streamline this process, an automated solution is required to extract accurate transcripts from video files using Microsoft Azure Speech-to-Text. This will enable faster, consistent, and scalable transcript generation for use in captions, accessibility compliance, and content repurposing.
+
+1. Video file to wav file conversion.
+2. Extract transcript from wav file usign Azure API.
+
+generated 25 output files",HE,generated 25 output files,Khushbu Pandey,Python,ACTIVE
+OEX - SB Template to SCORM package,"Manually transferring storyboard content into the WGU OEX platform is time-consuming, repetitive, and prone to human error. To enhance efficiency and ensure content consistency, an automated solution is needed to...","Manually transferring storyboard content into the WGU OEX platform is time-consuming, repetitive, and prone to human error. To enhance efficiency and ensure content consistency, an automated solution is needed to extract structured data from Word-based storyboards and populate it directly into the WGU OEX platform—streamlining the content upload process and reducing turnaround time in course developmen
+
+1. Read the word template.
+2. Convet docx to html format
+3. Read all the <h2>,<h3> and sub-sections.
+4. Create the default folder structure in the course root folder
+5. Create the main chapter.xml and sequence xml (Root Section, Lessons)
+6. Create the main section, Lessons (main lesson content)
+7. create the Sub-Lesson content in drafts folder
+8. create course.xml file - To create the course/year_mo.xml
+9. put main Lesson UUID in all the Sub Lessons in vertical folder
+10. move the Activity content (problem html files) to the problem folder
+11. modify the structure of multiple-Select, multiple-choice, true/false files in problem folder
+12. put <choicehint> tags, <label>>><<</label> tags in the problem files
+13. change the content from <html to <problem in the vertical folder
+14. remove <h1>Dummy</h1> tags AND change ""display_name=""Dummy""/>"" to ""display_name=""Text""/>""
+15. ensure only Section, Lesson 1, Lesson 2 .... and so on Lesson main file reference present in the chapter file.
+16. zip the package to tar.gz folder.
+
+No live data added",HE,No live data added,Rubha Mishra,Python,ACTIVE
+SocialStudies 6-10 A11y PPTs - (Word_to_PPTX),"Creating accessible PowerPoint presentations from Word-based storyboards across various templates is a manual, time-consuming process that often leads to inconsistencies and accessibility gaps. To ensure efficiency...","Creating accessible PowerPoint presentations from Word-based storyboards across various templates is a manual, time-consuming process that often leads to inconsistencies and accessibility gaps. To ensure efficiency, consistency, and WCAG compliance, an automated solution is needed to convert storyboard content into PowerPoint presentations, applying the appropriate templates and embedding accessibility features such as proper reading order, alt text, and slide structure.
+
+1. Read the word template file.
+2. Read the template and paste the word content in the corresponding PPT template
+
+Bot Handover to Team",HPT,Bot Handover to Team,Chandra,UiPath,ACTIVE
+Cenovus - Word to ASL,"Converting Word-based storyboards containing multiple templates into Articulate Storyline projects is a manual and resource-intensive process. Each template requires specific layout and interaction mapping, increasing...","Converting Word-based storyboards containing multiple templates into Articulate Storyline projects is a manual and resource-intensive process. Each template requires specific layout and interaction mapping, increasing the chances of inconsistency and delays. To streamline development, an automated solution is needed to interpret the storyboard content, identify the correct template for each section, and generate corresponding slides in Articulate Storyline—ensuring efficiency, accuracy, and scalable eLearning production.
+
+1. Upload the Storyboard word document and Audio folder to the interface; the bot will start running. 
+2. Download the input file from Google Drive. 
+3. Open Articulate Storyline 360 and log in. 
+4. Read the content in the Storyboard word document, specifically the ""Original Text Caption Data"", to identify the template names. 
+5. Based on the identified template name, select the corresponding template in Articulate Storyline 360. 
+6. Populate the text and insert the audio into the appropriate sections of Articulate Storyline 360. 
+7. Once all templates are completed, the course link will be sent via the interface. 
+8. Finally, the status will be updated in the interface.
+
+Generated 40 output files",HL,Generated 40 output files,Amrita,UiPath,ACTIVE
+Extraction of Evolve SCORM package to word template,Revamping eLearning content requires extracting and restructuring existing material into a standardized storyboard format. Manually extracting content from Evolve SCORM packages and aligning it with the existing Word...,"Revamping eLearning content requires extracting and restructuring existing material into a standardized storyboard format. Manually extracting content from Evolve SCORM packages and aligning it with the existing Word storyboard template is time-consuming and error-prone. An automated solution is needed to extract content—including text, media references, and interactions—from Evolve SCORM packages and map it into a structured Word template that mirrors the existing storyboard format, ensuring consistency, efficiency, and accuracy in the content revamp process.
+
+1. Extract the SCORM package
+2. Read the file content and check the block title name
+3. Based on the block title get the content from the block.json
+4. fill the blank template with the extracted text.
+5. extract the plain text to template format.
+
+No live data added becuase order was not properly arranged",HE,No live data added becuase order was not properly arranged,Harshita,Python,ACTIVE
+Content Extraction on Large Document for Plagrarism checking,"Identifying and isolating specific metadata such as ""Item-Meta-Data"" from Word documents for plagiarism checking is a manual, repetitive task that risks inconsistency and inefficiency. An automated solution is required...","Identifying and isolating specific metadata such as ""Item-Meta-Data"" from Word documents for plagiarism checking is a manual, repetitive task that risks inconsistency and inefficiency. An automated solution is required to read metadata from Word documents, extract the ""Item-Meta-Data"" section, and generate a new document with this content—ensuring accurate, consistent preparation for plagiarism detection while reducing manual effort and turnaround time.
+
+1. Read the word document meta information
+2. read the ""Item-Meta-Data"" information from the document.
+3. And paste this information in the new document and save the document to check for plagiarism
+
+No Live data added",HE,No Live data added,Monika Dhomase,UiPath,ACTIVE
+ASL Azure BOT Audio conversion - Word,"Manually generating audio files from voice-over (VO) text in Word-based storyboard templates is time-consuming and inefficient. To optimize this process, an automated solution is required to extract VO content from the...","Manually generating audio files from voice-over (VO) text in Word-based storyboard templates is time-consuming and inefficient. To optimize this process, an automated solution is required to extract VO content from the Word document and generate high-quality audio files using Microsoft Azure Text-to-Speech. This will ensure consistent narration, reduce manual effort, and accelerate the production of audio assets for eLearning content.
+
+1. Goto Azure Portal
+ 2. Check for Input folder container for every one hour interval
+ 3. Download Input word document from the container
+ 4. Validate Voice Name and Request ID from input Word again language Master sheet.
+ 5. If Voice Name validation fails email will be sent to the requestor id
+ 6. If Requestor ID validation fails email will ne sent to RPA team
+ 7. If validation passes, copy the """"Narration"""" from each row of the table and generate audio using speech.microsoft.com 
+ 8. Create SSML file using voice name and narration from the input and generate the .mp3 audio using export option
+ 8. Ouput audios will zipped and uploaded to Azure Output contaner
+ 9. Share the ouput path link to requestor id through email
+ 10. Repeat for every word document in the azure input container
+
+Generated 151 output files",HL,Generated 151 output files,Amrita,UiPath,ACTIVE
+Suncor ASL Conversion Bot - PPTX to ASL,"Creating Articulate Storyline courses manually for each storyboard using multiple templates is time-consuming, repetitive, and prone to inconsistencies. An automated solution is required to generate Storyline projects...","Creating Articulate Storyline courses manually for each storyboard using multiple templates is time-consuming, repetitive, and prone to inconsistencies. An automated solution is required to generate Storyline projects by mapping storyboard content to the appropriate templates, streamlining the course development process, ensuring consistency, and significantly reducing manual effort in building interactive eLearning modules.
+
+1. Upload the Storyboard PPTX document and Audio folder to the interface; the bot will start running. 
+2. Download the input file from Google Drive. 
+3. Open Articulate Storyline 360 and log in. 
+4. Read the slides in the Storyboard PPTX document, specifically the notes section, to identify the template names. 
+5. Based on the identified template name, select the corresponding template in Articulate Storyline 360. 
+6. Populate the text and insert the audio into the appropriate sections of Articulate Storyline 360. 
+7. Once all templates are completed, the course link will be sent via the interface. 
+8. Finally, the status will be updated in the interface.
+
+No Live data added",HL,No Live data added,Amrita,BOT Automation - UiPath; UI Interface - Angular; API - .Net Core 6.0,ACTIVE
+ASL Azure BOT Audio conversion - PPTX,"Manually generating audio files from voice-over (VO) text in the notes section of PowerPoint (PPTX) slides is labor-intensive and inefficient. To streamline the audio production process, an automated solution is needed...","Manually generating audio files from voice-over (VO) text in the notes section of PowerPoint (PPTX) slides is labor-intensive and inefficient. To streamline the audio production process, an automated solution is needed to extract VO text from each slide’s notes section and generate corresponding audio files using Microsoft Azure Text-to-Speech. This ensures consistent voice output, reduces manual effort, and accelerates the delivery of audio assets for eLearning content.
+
+1. Goto Azure Portal
+ 2. Check for Input folder container for every one hour interval
+ 3. Download Input PPT from the container
+ 4. Validate Voice Name and Request ID from input PPT again language Master sheet.
+ 5. If Voice Name validation fails email will be sent to the requestor id
+ 6. If Requestor ID validation fails email will ne sent to RPA team
+ 7. If validation passes, copy the """"Audio Transcript"""" from each slide and generate audio using speech.microsoft.com
+ 8. Ouput audios will zipped and uploaded to Azure Output folder 
+ 9. Share the ouput path link to requestor id through email
+ 10. Repeat for every ppt in the input folder.
+
+Generated 58 output files",HL,Generated 58 output files,Ranjeet Kumar,UiPath,ACTIVE
+MHHE - Science Word to PPTs,"Creating accessible PowerPoint presentations from Word-based storyboards across various templates is a manual, time-consuming process that often leads to inconsistencies and accessibility gaps. To ensure efficiency...","Creating accessible PowerPoint presentations from Word-based storyboards across various templates is a manual, time-consuming process that often leads to inconsistencies and accessibility gaps. To ensure efficiency, consistency, and WCAG compliance, an automated solution is needed to convert storyboard content into PowerPoint presentations, applying the appropriate templates and embedding accessibility features such as proper reading order, alt text, and slide structure.
+
+1. Read the word template file.
+2. Read the template and paste the word content in the corresponding PPT template
+
+Bot Handover to Team",HPT,Bot Handover to Team,Chandra,UiPath,ACTIVE
+Habitat Video download - MHE,Manually downloading video files from multiple chapters listed on the Habitat website and tracking them in Excel is time-consuming and prone to errors. An automated solution is required to download videos based on the...,"Manually downloading video files from multiple chapters listed on the Habitat website and tracking them in Excel is time-consuming and prone to errors. An automated solution is required to download videos based on the URLs provided in the Excel sheet, extract the video duration, and update the corresponding row in the sheet with the video length—ensuring accurate tracking, improved efficiency, and reduced manual effort in managing video assets.
+
+1. Read the input excelsheet and look for the ""Take another look"" navigation links
+2. Download the video present in that page using python script.
+3. renmae the video file as per the title.
+4. get the duration of the video file and write it in the excel.
+
+Generated 991 video files",HPT,Generated 991 video files,Ravi S,python,ACTIVE
+Speechelo PPTX to Audio Conversion Bot,"Manually creating Speechlo MP3 audio assets from PowerPoint (PPTX) storyboards is time-consuming and repetitive. Each slide contains narrator-specific information at the beginning, followed by the script in the notes...","Manually creating Speechlo MP3 audio assets from PowerPoint (PPTX) storyboards is time-consuming and repetitive. Each slide contains narrator-specific information at the beginning, followed by the script in the notes section. To streamline this process, an automated solution is needed to extract narrator details and script text from each slide, generate corresponding Speechlo MP3 files with appropriate voice mapping, compile the audio files into a ZIP archive, and automatically send it via email—ensuring efficient, consistent, and scalable audio production and delivery for eLearning content.
+
+1. Goto Azure Portal
+ 2. Check for Input folder container for every one hour interval
+ 3. Download Input PPT from the container
+ 4. Validate Voice Name and Request ID from input PPT again language Master sheet.
+ 5. If Voice Name validation fails email will be sent to the requestor id
+ 6. If Requestor ID validation fails email will ne sent to RPA team
+ 7. If validation passes, copy the """"Audio Transcript"""" from ""Note section"" each slide and generate audio using ""https://app.blasteronline.com/speechelo/""
+ 8. Ouput audios will zipped and uploaded to Azure Output folder 
+ 9. Share the ouput path link to requestor id through email
+ 10. Repeat for every ppt in the input folder.
+
+No live data added",HE,No live data added,Vijayaragavan,UiPath,ACTIVE
+"Stock Image, Video download","Manually downloading image files from Adobe Stock and Freepik, and videos from Envato, as listed in an Excel sheet, and then uploading them to Drive is time-consuming and prone to errors. Additionally, updating the...","Manually downloading image files from Adobe Stock and Freepik, and videos from Envato, as listed in an Excel sheet, and then uploading them to Drive is time-consuming and prone to errors. Additionally, updating the Excel sheet with corresponding Drive links for each file demands significant manual effort.
+
+1. Open Input excel sheet and look for the sheet name for the BOT to call
+
+2. For Evanto open the URL ""https://stock.adobe.com/in/""
+3. Put the Evanto video link in the search bar.
+4. Click Download Button and select the project used for.
+5. If video file other than mp4 format, then open the HandBrake website, input the videofile and select the .mp4 format and click Encode button
+
+2. For Adobe stock URL ""https://stock.adobe.com/in/""
+3. Put the adobe stock id in the search bar
+4. Use ""License"" button or ""Re-download for free"" button to download the image.
+
+No live data added",HE,No live data added,Vijayaragavan,UiPath,ACTIVE
+UMGC AEM,"Creating AEM pages across various templates and manually mapping them into the D2L environment is resource-intensive, error-prone, and lacks scalability. An automated approach is required to streamline the generation of...","Creating AEM pages across various templates and manually mapping them into the D2L environment is resource-intensive, error-prone, and lacks scalability. An automated approach is required to streamline the generation of AEM pages and ensure accurate mapping into corresponding D2L templates, enabling efficient content delivery, consistency, and reduced manual effort across platforms.
+
+WIP",HE,WIP,Fawzan Meer,UiPath,ACTIVE
+Editorial eLearning - SCORM to epub conversion,"SCORM packages are commonly used for eLearning but lack compatibility with all devices and offline formats. Manual conversion to EPUB is time-consuming, particularly when extracting structured content and layout. To...","SCORM packages are commonly used for eLearning but lack compatibility with all devices and offline formats. Manual conversion to EPUB is time-consuming, particularly when extracting structured content and layout. To enhance content portability and offline access, an automated solution is needed to convert SCORM to EPUB, focusing solely on extracting and preserving the content and layout—excluding any scripting or interactive logic.
+
+1. Extract the SCORM package
+2. Took the necessary html files and convert to xhtml format.
+3. ePub package files created, like content.opf, toc.ncx and toc.xhtml, nav.xhtml files created.
+4. clean the ePub package for unwanted contents.
+5. zip the package and convert to .epub package
+
+Exe Handover to Team",HPT,Exe Handover to Team,Ravi S,python,ACTIVE
+B&B LO conversion into PDF and word,"Converting Word documents to PDF manually across multiple folders and subfolders in SharePoint is time-consuming and difficult to manage at scale. Additionally, tracking and linking both the original Word and converted...","Converting Word documents to PDF manually across multiple folders and subfolders in SharePoint is time-consuming and difficult to manage at scale. Additionally, tracking and linking both the original Word and converted PDF files for each asset requires significant manual effort. To streamline this process, there is a need for an automated solution that can recursively convert Word files to PDFs within the SharePoint directory structure and record both file links in an Excel sheet against each corresponding asset.
+
+1. Input word document, excel files are downloaded from sharepoint
+2. read the excel and look for the partial word document name and write the full document name in the excel
+3. convert the word document in to pdf format.
+4. Copy .docx and .pdf files in to sharepoint location.
+5. Take the view and download links from sharepoint and fill the corresponding columns in the excel sheet.
+
+850 files",HE,850 files,Lakhan Khandagale,UiPath/Python,ACTIVE
+WordCount_Task_WGU_BSIT,"Converting Word documents to PDF manually across multiple folders and subfolders in SharePoint is time-consuming and difficult to manage at scale. Additionally, tracking and linking both the original Word and converted...","Converting Word documents to PDF manually across multiple folders and subfolders in SharePoint is time-consuming and difficult to manage at scale. Additionally, tracking and linking both the original Word and converted PDF files for each asset requires significant manual effort. To streamline this process, there is a need for an automated solution that can recursively convert Word files to PDFs within the SharePoint directory structure and record both file links in an Excel sheet against each corresponding asset.
+
+1. Cleanup the word document for headings H1 to H6.
+2. Remove the first table content appearing in the word document.
+3. Remove the ""[Not student-facing – instructions for Hurix:]...[Student facing - Hurix, write student facing below:]"" content.
+
+Exe Handover to Team",HE,Exe Handover to Team,Fawzan Meer,python,ACTIVE
+Evolve Automation - Word to replace existing content,"The current process of creating Evolve courses from Storyboard documents is manual, time-consuming, and error-prone. Users must download files, log in to the Evolve platform, identify and select templates, replace...","The current process of creating Evolve courses from Storyboard documents is manual, time-consuming, and error-prone. Users must download files, log in to the Evolve platform, identify and select templates, replace content, and manually share course links and status updates. This workflow lacks efficiency and scalability, highlighting the need for a streamlined and automated solution.
+
+1. Upload the Storyboard input Word document and image folder to the interface; the bot will start running.
+2. Download the input file from Google Drive.
+3. Open https://universityofphoenix.evolveauthoring.com/#/courses and log in.
+4. Read the Storyboard input Word document to identify the number of Evolve templates available.
+5. Based on the Evolve template name, select the corresponding template in the Evolve platform.
+6. Replace the text into the Evolve platform.
+7. Once all Evolve templates are completed, the course link will be sent via the interface.
+8. Finally, the status will be updated in the interface.
+
+Completed",HE,Completed,Harshita,UiPath,ACTIVE
+QuizMaker 360 - Question creation,"The current quiz creation process requires manual extraction of question content from HTML, identification of question types, handling of response options for multiple-choice questions, and separate management of images...","The current quiz creation process requires manual extraction of question content from HTML, identification of question types, handling of response options for multiple-choice questions, and separate management of images within answer choices. This fragmented workflow increases effort and the risk of errors when preparing quizzes for import into QuizMaker360. A streamlined approach is needed to automate content extraction, response handling, image processing, and quiz generation through a standardized Excel import.
+
+1. Extract the question content from HTML tag.
+2. Check for the question type and answer choices.
+3. If multipl choice question means, we need to add the responces.
+4. For all other type of question no need to add responces.
+5. If images are available in multiple qustion choices, download the images and upload it in the QuizMaker.
+6. Final excel sheet is imported via QuizMaker360 for generating quiz question.
+
+Completed",HL,Completed,Ranjeet Kumar,UiPath/Python,ACTIVE
+MHHE - Connect Asset maps,"The current grade comparison process involves manually retrieving old and new XML files from different locations, extracting data from XML tags into Excel, comparing data points, sorting questions, and generating...","The current grade comparison process involves manually retrieving old and new XML files from different locations, extracting data from XML tags into Excel, comparing data points, sorting questions, and generating customer reports. This workflow is time-consuming and prone to inconsistencies, creating a need for an automated solution to streamline data extraction, comparison, and report generation.
+
+1. Grade XMLs (old and new version) need to pick from two different locations.
+2. Generate the excel sheet with the data populate from the XML tags.
+3. Compare the data point and sort the questions.
+4. Generate the customer report from the result excel.
+
+Completed",HPT,Completed,Ravi S,python,ACTIVE
+UOP Strapi,"The current process of uploading assessment content to the Strapi LMS requires manual preparation and validation of Word documents, cleanup of formatting issues, extraction of scenarios, questions, and choices from...","The current process of uploading assessment content to the Strapi LMS requires manual preparation and validation of Word documents, cleanup of formatting issues, extraction of scenarios, questions, and choices from tabular structures, and separate handling of MCQ and multiselect questions. Updating completion status and sharing Strapi links further adds to manual effort. This fragmented workflow is time-consuming and error-prone, highlighting the need for an automated, end-to-end solution integrated with the portal.
+
+1. Input word document with filanemae starts with ""Strapi_"" to be uploaded to Portal
+2. BOT starts with clenaup for entermarks and content control
+3. Read the word document with tabular struction and look for the scenario, questions and choices
+4. MCQ and Multiselect quesion are uploaded to Strapi LMS site
+4. completed status will be updated to the portal and text file will be downloaded with strapi link it
+
+Completed",HE,Completed,Harshita,UiPath,ACTIVE
+HBP content to CourseEra,"Customer course content is delivered in XML format, requiring multiple manual transformations to onboard it into the Coursera platform. This process is inefficient, error-prone, and does not scale, leading to delays in...","Customer course content is delivered in XML format, requiring multiple manual transformations to onboard it into the Coursera platform. This process is inefficient, error-prone, and does not scale, leading to delays in course setup and inconsistent configurations. An automated, BOT-driven solution is required to standardize XML ingestion, enable structured interim conversion, and reliably migrate content into Coursera shells with predefined course settings and reading items, reducing manual effort and improving speed, accuracy, and scalability.
+
+1. Input - XML files from customer
+2. Interrim conversion from XML to excelc conversion
+3. BOT migrates content from Excel to Coursera shell by adding basic course settings and Reading items
+
+Completed",HE,Completed,Kanchan Shine,RPA,ACTIVE
+Coursera 97 BOT from SB,"Customer course content is delivered in XML format, requiring multiple manual transformations to onboard it into the Coursera platform. This process is inefficient, error-prone, and does not scale, leading to delays in...","Customer course content is delivered in XML format, requiring multiple manual transformations to onboard it into the Coursera platform. This process is inefficient, error-prone, and does not scale, leading to delays in course setup and inconsistent configurations. An automated, BOT-driven solution is required to standardize XML ingestion, enable structured interim conversion, and reliably migrate content into Coursera shells with predefined course settings and reading items, reducing manual effort and improving speed, accuracy, and scalability.
+
+Completed",HE,Completed,Harshita,RPA,ACTIVE
+D2L to AEM - Video and Transcript,"Customer course content is delivered in XML format, requiring multiple manual transformations to onboard it into the Coursera platform. This process is inefficient, error-prone, and does not scale, leading to delays in...","Customer course content is delivered in XML format, requiring multiple manual transformations to onboard it into the Coursera platform. This process is inefficient, error-prone, and does not scale, leading to delays in course setup and inconsistent configurations. An automated, BOT-driven solution is required to standardize XML ingestion, enable structured interim conversion, and reliably migrate content into Coursera shells with predefined course settings and reading items, reducing manual effort and improving speed, accuracy, and scalability.
+
+Completed",HE,Completed,Sukaniya R,UiPath,ACTIVE
+Canvas BOT,"Customer course content is delivered in XML format, requiring multiple manual transformations to onboard it into the Coursera platform. This process is inefficient, error-prone, and does not scale, leading to delays in...","Customer course content is delivered in XML format, requiring multiple manual transformations to onboard it into the Coursera platform. This process is inefficient, error-prone, and does not scale, leading to delays in course setup and inconsistent configurations. An automated, BOT-driven solution is required to standardize XML ingestion, enable structured interim conversion, and reliably migrate content into Coursera shells with predefined course settings and reading items, reducing manual effort and improving speed, accuracy, and scalability.
+
+Not Started",HL,Not Started,Khushbu Pandey,RPA,ACTIVE
+Coursera 97 - Video Optimization,"Customer course content is delivered in XML format, requiring multiple manual transformations to onboard it into the Coursera platform. This process is inefficient, error-prone, and does not scale, leading to delays in...","Customer course content is delivered in XML format, requiring multiple manual transformations to onboard it into the Coursera platform. This process is inefficient, error-prone, and does not scale, leading to delays in course setup and inconsistent configurations. An automated, BOT-driven solution is required to standardize XML ingestion, enable structured interim conversion, and reliably migrate content into Coursera shells with predefined course settings and reading items, reducing manual effort and improving speed, accuracy, and scalability.
+
+Completed",HE,Completed,Vijayaragavan,RPA,ACTIVE
+Coursera 97 - Movie Video Assets to SVN,"Customer course content is delivered in XML format, requiring multiple manual transformations to onboard it into the Coursera platform. This process is inefficient, error-prone, and does not scale, leading to delays in...","Customer course content is delivered in XML format, requiring multiple manual transformations to onboard it into the Coursera platform. This process is inefficient, error-prone, and does not scale, leading to delays in course setup and inconsistent configurations. An automated, BOT-driven solution is required to standardize XML ingestion, enable structured interim conversion, and reliably migrate content into Coursera shells with predefined course settings and reading items, reducing manual effort and improving speed, accuracy, and scalability.
+
+Completed",HE,Completed,Vijayaragavan,RPA,ACTIVE
+B & B LO Conversion,"Customer course content is delivered in XML format, requiring multiple manual transformations to onboard it into the Coursera platform. This process is inefficient, error-prone, and does not scale, leading to delays in...","Customer course content is delivered in XML format, requiring multiple manual transformations to onboard it into the Coursera platform. This process is inefficient, error-prone, and does not scale, leading to delays in course setup and inconsistent configurations. An automated, BOT-driven solution is required to standardize XML ingestion, enable structured interim conversion, and reliably migrate content into Coursera shells with predefined course settings and reading items, reducing manual effort and improving speed, accuracy, and scalability.
+
+Completed",,Completed,Lakhan Khandagale,RPA,ACTIVE
+ASL Automation,"Customer course content is delivered in XML format, requiring multiple manual transformations to onboard it into the Coursera platform. This process is inefficient, error-prone, and does not scale, leading to delays in...","Customer course content is delivered in XML format, requiring multiple manual transformations to onboard it into the Coursera platform. This process is inefficient, error-prone, and does not scale, leading to delays in course setup and inconsistent configurations. An automated, BOT-driven solution is required to standardize XML ingestion, enable structured interim conversion, and reliably migrate content into Coursera shells with predefined course settings and reading items, reducing manual effort and improving speed, accuracy, and scalability.
+
+Enmax
+
+Completed",,Completed,Amrita,RPA,ACTIVE
+Coursera 247,"Customer course content is delivered in XML format, requiring multiple manual transformations to onboard it into the Coursera platform. This process is inefficient, error-prone, and does not scale, leading to delays in...","Customer course content is delivered in XML format, requiring multiple manual transformations to onboard it into the Coursera platform. This process is inefficient, error-prone, and does not scale, leading to delays in course setup and inconsistent configurations. An automated, BOT-driven solution is required to standardize XML ingestion, enable structured interim conversion, and reliably migrate content into Coursera shells with predefined course settings and reading items, reducing manual effort and improving speed, accuracy, and scalability.
+
+Claude to Outline - Part I ad Part II
+
+Completed",,Completed,Shabna,RPA,ACTIVE
+Coursera 97,"Customer course content is delivered in XML format, requiring multiple manual transformations to onboard it into the Coursera platform. This process is inefficient, error-prone, and does not scale, leading to delays in...","Customer course content is delivered in XML format, requiring multiple manual transformations to onboard it into the Coursera platform. This process is inefficient, error-prone, and does not scale, leading to delays in course setup and inconsistent configurations. An automated, BOT-driven solution is required to standardize XML ingestion, enable structured interim conversion, and reliably migrate content into Coursera shells with predefined course settings and reading items, reducing manual effort and improving speed, accuracy, and scalability.
+
+VSB Script Extraction BOT
+
+Completed",,Completed,Reena,RPA,ACTIVE
+Chamberlain,"Customer course content is delivered in XML format, requiring multiple manual transformations to onboard it into the Coursera platform. This process is inefficient, error-prone, and does not scale, leading to delays in...","Customer course content is delivered in XML format, requiring multiple manual transformations to onboard it into the Coursera platform. This process is inefficient, error-prone, and does not scale, leading to delays in course setup and inconsistent configurations. An automated, BOT-driven solution is required to standardize XML ingestion, enable structured interim conversion, and reliably migrate content into Coursera shells with predefined course settings and reading items, reducing manual effort and improving speed, accuracy, and scalability.
+
+SB to client template PPT
+
+Yet to receice input",,Yet to receice input,Yogesh Hankre,RPA,ACTIVE
+Cousera 247 - Tool List extraction,"Customer course content is delivered in XML format, requiring multiple manual transformations to onboard it into the Coursera platform. This process is inefficient, error-prone, and does not scale, leading to delays in...","Customer course content is delivered in XML format, requiring multiple manual transformations to onboard it into the Coursera platform. This process is inefficient, error-prone, and does not scale, leading to delays in course setup and inconsistent configurations. An automated, BOT-driven solution is required to standardize XML ingestion, enable structured interim conversion, and reliably migrate content into Coursera shells with predefined course settings and reading items, reducing manual effort and improving speed, accuracy, and scalability.
+
+Yet to receice input",,Yet to receice input,Shabna,RPA,ACTIVE
+Word to Coursera,"Customer course content is delivered in XML format, requiring multiple manual transformations to onboard it into the Coursera platform. This process is inefficient, error-prone, and does not scale, leading to delays in...","Customer course content is delivered in XML format, requiring multiple manual transformations to onboard it into the Coursera platform. This process is inefficient, error-prone, and does not scale, leading to delays in course setup and inconsistent configurations. An automated, BOT-driven solution is required to standardize XML ingestion, enable structured interim conversion, and reliably migrate content into Coursera shells with predefined course settings and reading items, reducing manual effort and improving speed, accuracy, and scalability.
+
+YTS",,YTS,Purnima,RPA,ACTIVE
+UOP SB Conversion,"Customer course content is delivered in XML format, requiring multiple manual transformations to onboard it into the Coursera platform. This process is inefficient, error-prone, and does not scale, leading to delays in...","Customer course content is delivered in XML format, requiring multiple manual transformations to onboard it into the Coursera platform. This process is inefficient, error-prone, and does not scale, leading to delays in course setup and inconsistent configurations. An automated, BOT-driven solution is required to standardize XML ingestion, enable structured interim conversion, and reliably migrate content into Coursera shells with predefined course settings and reading items, reducing manual effort and improving speed, accuracy, and scalability.
+
+Need to create a interim conversion for BOT tempalte
+
+YTS",,YTS,Bhumista,RPA,ACTIVE
+Accessibility Link Checker for UMGC,"Customer course content is delivered in XML format, requiring multiple manual transformations to onboard it into the Coursera platform. This process is inefficient, error-prone, and does not scale, leading to delays in...","Customer course content is delivered in XML format, requiring multiple manual transformations to onboard it into the Coursera platform. This process is inefficient, error-prone, and does not scale, leading to delays in course setup and inconsistent configurations. An automated, BOT-driven solution is required to standardize XML ingestion, enable structured interim conversion, and reliably migrate content into Coursera shells with predefined course settings and reading items, reducing manual effort and improving speed, accuracy, and scalability.
+
+To check the list of link in the word document
+
+YTS",,YTS,Bhumista,RPA,ACTIVE
+AEM - Knowledge Check Shuffle,"Customer course content is delivered in XML format, requiring multiple manual transformations to onboard it into the Coursera platform. This process is inefficient, error-prone, and does not scale, leading to delays in...","Customer course content is delivered in XML format, requiring multiple manual transformations to onboard it into the Coursera platform. This process is inefficient, error-prone, and does not scale, leading to delays in course setup and inconsistent configurations. An automated, BOT-driven solution is required to standardize XML ingestion, enable structured interim conversion, and reliably migrate content into Coursera shells with predefined course settings and reading items, reducing manual effort and improving speed, accuracy, and scalability.
+
+Completed",,Completed,Ananya,RPA,ACTIVE
+Coursera 247 - VSB PPT Generation automation,"Customer course content is delivered in XML format, requiring multiple manual transformations to onboard it into the Coursera platform. This process is inefficient, error-prone, and does not scale, leading to delays in...","Customer course content is delivered in XML format, requiring multiple manual transformations to onboard it into the Coursera platform. This process is inefficient, error-prone, and does not scale, leading to delays in course setup and inconsistent configurations. An automated, BOT-driven solution is required to standardize XML ingestion, enable structured interim conversion, and reliably migrate content into Coursera shells with predefined course settings and reading items, reducing manual effort and improving speed, accuracy, and scalability.
+
+Completed",,Completed,Shabna,RPA,ACTIVE
+D2L - Quiz Multiselect,"Customer course content is delivered in XML format, requiring multiple manual transformations to onboard it into the Coursera platform. This process is inefficient, error-prone, and does not scale, leading to delays in...","Customer course content is delivered in XML format, requiring multiple manual transformations to onboard it into the Coursera platform. This process is inefficient, error-prone, and does not scale, leading to delays in course setup and inconsistent configurations. An automated, BOT-driven solution is required to standardize XML ingestion, enable structured interim conversion, and reliably migrate content into Coursera shells with predefined course settings and reading items, reducing manual effort and improving speed, accuracy, and scalability.
+
+Completed",,Completed,Purnima,RPA,ACTIVE
+D2L - AEM Linking,"Customer course content is delivered in XML format, requiring multiple manual transformations to onboard it into the Coursera platform. This process is inefficient, error-prone, and does not scale, leading to delays in...","Customer course content is delivered in XML format, requiring multiple manual transformations to onboard it into the Coursera platform. This process is inefficient, error-prone, and does not scale, leading to delays in course setup and inconsistent configurations. An automated, BOT-driven solution is required to standardize XML ingestion, enable structured interim conversion, and reliably migrate content into Coursera shells with predefined course settings and reading items, reducing manual effort and improving speed, accuracy, and scalability.
+
+Completed",,Completed,Purnima,RPA,ACTIVE
+UMGC SB Checker,"Customer course content is delivered in XML format, requiring multiple manual transformations to onboard it into the Coursera platform. This process is inefficient, error-prone, and does not scale, leading to delays in...","Customer course content is delivered in XML format, requiring multiple manual transformations to onboard it into the Coursera platform. This process is inefficient, error-prone, and does not scale, leading to delays in course setup and inconsistent configurations. An automated, BOT-driven solution is required to standardize XML ingestion, enable structured interim conversion, and reliably migrate content into Coursera shells with predefined course settings and reading items, reducing manual effort and improving speed, accuracy, and scalability.
+
+Completed",,Completed,Ananya,RPA,ACTIVE
+Speechelo Text-to-Speech Integration,"Customer course content is delivered in XML format, requiring multiple manual transformations to onboard it into the Coursera platform. This process is inefficient, error-prone, and does not scale, leading to delays in...","Customer course content is delivered in XML format, requiring multiple manual transformations to onboard it into the Coursera platform. This process is inefficient, error-prone, and does not scale, leading to delays in course setup and inconsistent configurations. An automated, BOT-driven solution is required to standardize XML ingestion, enable structured interim conversion, and reliably migrate content into Coursera shells with predefined course settings and reading items, reducing manual effort and improving speed, accuracy, and scalability.
+
+Completed",,Completed,Akshita Lad,RPA,ACTIVE
+Coursera247 - SB to Outline Formatting update,"Customer course content is delivered in XML format, requiring multiple manual transformations to onboard it into the Coursera platform. This process is inefficient, error-prone, and does not scale, leading to delays in...","Customer course content is delivered in XML format, requiring multiple manual transformations to onboard it into the Coursera platform. This process is inefficient, error-prone, and does not scale, leading to delays in course setup and inconsistent configurations. An automated, BOT-driven solution is required to standardize XML ingestion, enable structured interim conversion, and reliably migrate content into Coursera shells with predefined course settings and reading items, reducing manual effort and improving speed, accuracy, and scalability.
+
+Completed",,Completed,Shabna,RPA,ACTIVE
+AirtableUpdate,"Customer course content is delivered in XML format, requiring multiple manual transformations to onboard it into the Coursera platform. This process is inefficient, error-prone, and does not scale, leading to delays in...","Customer course content is delivered in XML format, requiring multiple manual transformations to onboard it into the Coursera platform. This process is inefficient, error-prone, and does not scale, leading to delays in course setup and inconsistent configurations. An automated, BOT-driven solution is required to standardize XML ingestion, enable structured interim conversion, and reliably migrate content into Coursera shells with predefined course settings and reading items, reducing manual effort and improving speed, accuracy, and scalability.
+
+Completed",,Completed,Shabna,RPA,ACTIVE
+Coursera247-Ungraded Lab,"Customer course content is delivered in XML format, requiring multiple manual transformations to onboard it into the Coursera platform. This process is inefficient, error-prone, and does not scale, leading to delays in...","Customer course content is delivered in XML format, requiring multiple manual transformations to onboard it into the Coursera platform. This process is inefficient, error-prone, and does not scale, leading to delays in course setup and inconsistent configurations. An automated, BOT-driven solution is required to standardize XML ingestion, enable structured interim conversion, and reliably migrate content into Coursera shells with predefined course settings and reading items, reducing manual effort and improving speed, accuracy, and scalability.
+
+Completed",,Completed,Shabna,RPA,ACTIVE
+NCLEX-45 Concepts Doc to PPT conversion,"Customer course content is delivered in XML format, requiring multiple manual transformations to onboard it into the Coursera platform. This process is inefficient, error-prone, and does not scale, leading to delays in...","Customer course content is delivered in XML format, requiring multiple manual transformations to onboard it into the Coursera platform. This process is inefficient, error-prone, and does not scale, leading to delays in course setup and inconsistent configurations. An automated, BOT-driven solution is required to standardize XML ingestion, enable structured interim conversion, and reliably migrate content into Coursera shells with predefined course settings and reading items, reducing manual effort and improving speed, accuracy, and scalability.
+
+Completed",,Completed,Bhumista,RPA,ACTIVE
+Coursera247 - Screencast VSB Scrip and Narration Script Extraction Automation,"Customer course content is delivered in XML format, requiring multiple manual transformations to onboard it into the Coursera platform. This process is inefficient, error-prone, and does not scale, leading to delays in...","Customer course content is delivered in XML format, requiring multiple manual transformations to onboard it into the Coursera platform. This process is inefficient, error-prone, and does not scale, leading to delays in course setup and inconsistent configurations. An automated, BOT-driven solution is required to standardize XML ingestion, enable structured interim conversion, and reliably migrate content into Coursera shells with predefined course settings and reading items, reducing manual effort and improving speed, accuracy, and scalability.
+
+Completed",,Completed,Shabna/Fawzan,RPA,ACTIVE
+Long Form Form Data,"Customer course content is delivered in XML format, requiring multiple manual transformations to onboard it into the Coursera platform. This process is inefficient, error-prone, and does not scale, leading to delays in...","Customer course content is delivered in XML format, requiring multiple manual transformations to onboard it into the Coursera platform. This process is inefficient, error-prone, and does not scale, leading to delays in course setup and inconsistent configurations. An automated, BOT-driven solution is required to standardize XML ingestion, enable structured interim conversion, and reliably migrate content into Coursera shells with predefined course settings and reading items, reducing manual effort and improving speed, accuracy, and scalability.
+
+YTS",,YTS,Anima,RPA,ACTIVE
+Coursera@47 - IVQ,"Customer course content is delivered in XML format, requiring multiple manual transformations to onboard it into the Coursera platform. This process is inefficient, error-prone, and does not scale, leading to delays in...","Customer course content is delivered in XML format, requiring multiple manual transformations to onboard it into the Coursera platform. This process is inefficient, error-prone, and does not scale, leading to delays in course setup and inconsistent configurations. An automated, BOT-driven solution is required to standardize XML ingestion, enable structured interim conversion, and reliably migrate content into Coursera shells with predefined course settings and reading items, reducing manual effort and improving speed, accuracy, and scalability.
+
+Completed",,Completed,Anima,RPA,ACTIVE
+UMGC - Sharepoint_Doc_Checker,"Customer course content is delivered in XML format, requiring multiple manual transformations to onboard it into the Coursera platform. This process is inefficient, error-prone, and does not scale, leading to delays in...","Customer course content is delivered in XML format, requiring multiple manual transformations to onboard it into the Coursera platform. This process is inefficient, error-prone, and does not scale, leading to delays in course setup and inconsistent configurations. An automated, BOT-driven solution is required to standardize XML ingestion, enable structured interim conversion, and reliably migrate content into Coursera shells with predefined course settings and reading items, reducing manual effort and improving speed, accuracy, and scalability.
+
+YTS",,YTS,Romal,RPA,ACTIVE
+Coursera247 - Practice Quiz and Pracitice assignment,"Customer course content is delivered in XML format, requiring multiple manual transformations to onboard it into the Coursera platform. This process is inefficient, error-prone, and does not scale, leading to delays in...","Customer course content is delivered in XML format, requiring multiple manual transformations to onboard it into the Coursera platform. This process is inefficient, error-prone, and does not scale, leading to delays in course setup and inconsistent configurations. An automated, BOT-driven solution is required to standardize XML ingestion, enable structured interim conversion, and reliably migrate content into Coursera shells with predefined course settings and reading items, reducing manual effort and improving speed, accuracy, and scalability.
+
+Completed",,Completed,Shabna,RPA,ACTIVE
+Coursera 16 - VSB PPT,"Customer course content is delivered in XML format, requiring multiple manual transformations to onboard it into the Coursera platform. This process is inefficient, error-prone, and does not scale, leading to delays in...","Customer course content is delivered in XML format, requiring multiple manual transformations to onboard it into the Coursera platform. This process is inefficient, error-prone, and does not scale, leading to delays in course setup and inconsistent configurations. An automated, BOT-driven solution is required to standardize XML ingestion, enable structured interim conversion, and reliably migrate content into Coursera shells with predefined course settings and reading items, reducing manual effort and improving speed, accuracy, and scalability.",,,Fawzan Meer,RPA,ACTIVE
+Cousera247 - HOL PDF Upload to Courseshell,there are about 200+ interactives to added to coursera courses inside each of the module by adding plugins.,there are about 200+ interactives to added to coursera courses inside each of the module by adding plugins.,,,Kanchan Shine,RPA,ACTIVE
+HBP Coursera - Interactivies Integration,there are about 200+ interactives to added to coursera courses inside each of the module by adding plugins.,there are about 200+ interactives to added to coursera courses inside each of the module by adding plugins.,,,Rajasmitha,RPA,ACTIVE
+Filename renaming,there are about 200+ interactives to added to coursera courses inside each of the module by adding plugins.,"there are about 200+ interactives to added to coursera courses inside each of the module by adding plugins.
+
+created a python web app which takes input the root drive path and prefix naming and it will update recursively to all the files with the prefix naming",,created a python web app which takes input the root drive path and prefix naming and it will update recursively to all the files with the prefix naming,Reena,RPA,ACTIVE
+Drive to SVN Automation,there are about 200+ interactives to added to coursera courses inside each of the module by adding plugins.,there are about 200+ interactives to added to coursera courses inside each of the module by adding plugins.,,,Shikha,Python,ACTIVE
+coursera XDP Document,there are about 200+ interactives to added to coursera courses inside each of the module by adding plugins.,there are about 200+ interactives to added to coursera courses inside each of the module by adding plugins.,,,Meena,Python / UIPath,ACTIVE
+project module,there are about 200+ interactives to added to coursera courses inside each of the module by adding plugins.,there are about 200+ interactives to added to coursera courses inside each of the module by adding plugins.,,,Meena,Python / UIPath,ACTIVE
+career,there are about 200+ interactives to added to coursera courses inside each of the module by adding plugins.,there are about 200+ interactives to added to coursera courses inside each of the module by adding plugins.,,,Meena,Python / UIPath,ACTIVE
+GenAI,there are about 200+ interactives to added to coursera courses inside each of the module by adding plugins.,there are about 200+ interactives to added to coursera courses inside each of the module by adding plugins.,,,Meena,Python / UIPath,ACTIVE
+capstone,capstone,capstone,,,Meena,Python / UIPath,ACTIVE
+CMU,Earlier BOT will handle one instance in a unit.,Earlier BOT will handle one instance in a unit.,,,Dimple/Ankita,UIPath,ACTIVE
+UMGC Assignment BOT Update,Combined assignments being splitted manually and this is time consuming,"Combined assignments being splitted manually and this is time consuming
+
+BOT is updated so that it splits assignements and uploads separately",,BOT is updated so that it splits assignements and uploads separately,Purnima,UIPath,ACTIVE
+Haremi Avallain,taking time to each LO details manually,taking time to each LO details manually,,,Shiv/Purnima,UIPath,ACTIVE
+Stevens Canvas BOT,Stevens Canvas BOT,3 hours per course,,3 hours per course,Uttara,RPA,ACTIVE
+Stevens Podcast extraction,Client has provided NotebookLM to extract Podcast from each module lesson-wise. The input SB has all the lesson in one module. It is very tedious work to split each and every lesson from each module and if there are...,"Client has provided NotebookLM to extract Podcast from each module lesson-wise. The input SB has all the lesson in one module. It is very tedious work to split each and every lesson from each module and if there are pages inside lessons, page 4 to be remove. There is a effort to upload doc to NotebookLM and wait till podcast to generate and download
+
+A python script created to split all the lesson from the input module wise SB and ignore few pages being extracted.
+A BOT is created to avoid manual upload and downlaod into NotebookLM platform",,A python script created to split all the lesson from the input module wise SB and ignore few pages being extracted. A BOT is created to avoid manual upload and...,Srikanth,Python Script / UIPath,ACTIVE
+Stevens Podcast Transcript Extraction,"To review the generated podcast from lessons, the ID/QA will require transcript from audio to checke the podcast agianst with SB","To review the generated podcast from lessons, the ID/QA will require transcript from audio to checke the podcast agianst with SB
+
+Created a python script to extract transcript with que points and only text from audio",,Created a python script to extract transcript with que points and only text from audio,Srikanth,RPA,ACTIVE
+Coursera - Video OST population on AfterEffects/Premier,Coursera - Video OST population on AfterEffects/Premier,Coursera - Video OST population on AfterEffects/Premier,,,Vijayaragavan,RPA,ACTIVE
+CMU Podcast script extraction and importing into BOT template,To use the existing BOT to convert audio from text need to populate podcast content into BOT word template.,"To use the existing BOT to convert audio from text need to populate podcast content into BOT word template.
+
+A python script is created to extract podcast content from storyboard and populate it in Elevelabs input template",,A python script is created to extract podcast content from storyboard and populate it in Elevelabs input template,Anupma,Python,ACTIVE
+CMU Platform upload BOT,Adding components and relevant css is time consuming,"Adding components and relevant css is time consuming
+
+A BOT is created to avoid manual choosing template and content to it on the CMU Platform",,A BOT is created to avoid manual choosing template and content to it on the CMU Platform,Rupa Mishra,UIPath / Python,ACTIVE
+Sharpen - Content Review - Extraction,Manuallya extracting chapter summary screenshot and Quiz extraction is time consuming,"Manuallya extracting chapter summary screenshot and Quiz extraction is time consuming
+
+Created a python which navigates the coursesumary URL of a particular chapter and takes screenshots and save it in a sheet.
+Also under ellie chapter extracts all the quiz content in client said format",,Created a python which navigates the coursesumary URL of a particular chapter and takes screenshots and save it in a sheet. Also under ellie chapter extracts...,Retesh Kotian,Python,ACTIVE
+RISE - ACS - BOT New Templates,Adding each template's comp,Adding each template's comp,,,Sanchita Datta,RPA,ACTIVE
+TX Math - Video Download Automation,downloading each video files form frame.io is time consuming and uploading back to drive,"downloading each video files form frame.io is time consuming and uploading back to drive
+
+Created a UIPath BOT to download videos and supporting files from frame.io and deoployed in four machines so that multiple files downloads parallelly and also created a python script to upload back to drive",,Created a UIPath BOT to download videos and supporting files from frame.io and deoployed in four machines so that multiple files downloads parallelly and also...,Lakhan Khandagale,UiPath / Python,ACTIVE
+ING - Accessibility doc extraction from ASL web package,creating accessibility document from already completed asl file for mulitple languages is time consuming,"creating accessibility document from already completed asl file for mulitple languages is time consuming
+
+Created a python script to extract accessibility document based on the sample file shared for muliptle languages",,Created a python script to extract accessibility document based on the sample file shared for muliptle languages,Amrita,Python,ACTIVE
+GGU - D2L,Selecting template copy and pasting conent from the SB to D2L platform is time consuming,"Selecting template copy and pasting conent from the SB to D2L platform is time consuming
+
+Create BOT to choose template and populate content from SB to platform",,Create BOT to choose template and populate content from SB to platform,Uttara,UIPath,ACTIVE
+CMU platform upload,coying each html layout and importing into blackboard is timeconsuming,"coying each html layout and importing into blackboard is timeconsuming
+
+created a bot which reads excel for the unit title and relevant html file and import it in the blackboard platform",,created a bot which reads excel for the unit title and relevant html file and import it in the blackboard platform,Anupma/Shiv,UiPath,ACTIVE
+Elllie - Quiz Count,Manuallya calculating the quiz count under each chapter for a course is time consiuming,"Manuallya calculating the quiz count under each chapter for a course is time consiuming
+
+Created a python script which navigates each course and expand each chapter and extracts quiz count and add it to excel sheet",,Created a python script which navigates each course and expand each chapter and extracts quiz count and add it to excel sheet,Retesh Kotian,RPA,ACTIVE
+BitsPilani - D2L,BitsPilani - D2L,BitsPilani - D2L,,,Sanchita,RPA,ACTIVE
+Minnesota - Canvas,Minnesota - Canvas,Minnesota - Canvas,,,Mukesh,RPA,ACTIVE
+NUC - Canvas,NUC - Canvas,NUC - Canvas,,,Mukesh,RPA,ACTIVE
+Coursera - PreLaunch QA,Coursera - PreLaunch QA,Coursera - PreLaunch QA,,,Shikha,RPA,ACTIVE

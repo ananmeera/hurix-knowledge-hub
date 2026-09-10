@@ -20,6 +20,12 @@ export const api = {
   session: (id:number) => request<any[]>(`/chat/sessions/${id}`),
   feedback: (payload:any) => request('/feedback', {method:'POST', body:JSON.stringify(payload)}),
   automations: (q='') => request<any[]>(`/automations${q ? `?q=${encodeURIComponent(q)}` : ''}`),
+  createAutomation: (payload: Record<string, string>) => request<any>('/automations', { method: 'POST', body: JSON.stringify(payload) }),
+  importAutomations: (file: File) => {
+    const data = new FormData();
+    data.append('file', file);
+    return request<{ created: number; skipped: number; total: number }>('/automations/import', { method: 'POST', body: data });
+  },
   documents: () => request<any[]>('/knowledge/documents'),
   document: (id:number) => request<any>(`/knowledge/documents/${id}`),
   approve: (id:number) => request<any>(`/knowledge/documents/${id}/approve`, {method:'POST'}),

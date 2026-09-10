@@ -6,9 +6,10 @@ from app.models import Document, AutomationCatalog, KnowledgeGap
 from app.core.config import settings
 from app.services.file_store import resolve_stored_file
 
-STOPWORDS = {"the","a","an","is","are","to","of","for","in","on","how","what","do","i","we","our","can","with","and","or","does","there"}
-SHORT_TERMS = {"it", "hr", "qa", "ai", "rpa"}
-GENERIC_TERMS = {"automation", "tool", "tools", "bot", "process", "available", "request", "new", "document", "documents", "please", "need", "help", "steps", "guide"}
+STOPWORDS = {"the","a","an","is","are","to","of","for","in","on","how","what","do","i","we","our","can","with","and","or","does","did","has","have","there"}
+SHORT_TERMS = {"it", "hr", "qa", "ai", "rpa", "cmu", "d2l", "wgu", "mhe", "oup", "asl", "sbu"}
+GENERIC_TERMS = {"automation","tool","tools","bot","bots","process","available","request","new","document","documents","please","need","help","steps","guide","hurix","company","exist","exists","upload","platform"}
+BOT_INTENT = re.compile(r"\b(bot|bots|rpa)\b", re.I)
 HEADER_NOISE = re.compile(r"(requested by|problem statement|developed using|request date|start date|end date|remarks)", re.I)
 CATALOG_HEADER = re.compile(r"(?m)^(?=\d{1,3}\s+[A-Z0-9][A-Za-z0-9][^.?\n]{3,})")
 NAME_BEFORE_EMAIL = re.compile(r"^(.*?(?:Automation|Process|Bot|Guide|SOP|Script|Tool|Assistant))([a-z]{3,})$", re.I)
@@ -19,7 +20,11 @@ def _terms(text: str) -> set[str]:
 
 
 def _distinctive(query: str) -> set[str]:
-    return {term for term in _terms(query) if term not in GENERIC_TERMS and len(term) >= 4}
+    return {term for term in _terms(query) if term not in GENERIC_TERMS and (len(term) >= 4 or term in SHORT_TERMS)}
+
+
+def _bot_intent(query: str) -> bool:
+    return bool(BOT_INTENT.search(query or ""))
 
 
 def _score(query: str, text: str, title: str = "") -> float:
@@ -40,6 +45,9 @@ def _score(query: str, text: str, title: str = "") -> float:
         score += 1.5 * (hits / len(distinctive))
         if title and any(term in title.lower() for term in distinctive):
             score += 1.25
+        title_terms = _terms(title)
+        if title_terms and distinctive:
+            score += 2.0 * (len(distinctive & title_terms) / len(distinctive))
     return score
 
 
@@ -72,12 +80,27 @@ def _normalize_text(text: str) -> str:
     return "\n".join(line for line in lines if line).strip()
 
 
+def _clip_complete(text: str, limit: int = 4000) -> str:
+    text = (text or "").strip()
+    if len(text) <= limit:
+        return text
+    clipped = text[:limit]
+    sentence_end = max(clipped.rfind(". "), clipped.rfind(".\n"), clipped.rfind("? "), clipped.rfind("! "))
+    if sentence_end >= 200:
+        return clipped[: sentence_end + 1].strip()
+    line_end = clipped.rfind("\n")
+    if line_end >= 200:
+        return clipped[:line_end].strip()
+    word_end = clipped.rfind(" ")
+    return clipped[:word_end].strip() if word_end > 0 else clipped.strip()
+
+
 def _split_sections(text: str) -> list[str]:
     catalog = [part.strip() for part in CATALOG_HEADER.split(text) if len(part.strip()) > 40]
     usable = []
     for part in catalog:
-        if len(part) > 2200:
-            usable.append(part[:2200].rsplit("\n", 1)[0].strip())
+        if len(part) > 4500:
+            usable.append(_clip_complete(part, 4500))
         else:
             usable.append(part)
     if len(usable) >= 2:
@@ -138,12 +161,12 @@ def _structure_section(section: str, fallback_title: str = "") -> dict:
             if steps and number == 1:
                 break
             seen_step = True
-            if len(steps) < 12:
+            if len(steps) < 20:
                 steps.append(step.group(2).strip())
             continue
         if not seen_step and len(line) > 40:
             paras.append(line)
-    return {"title": title, "paras": paras[:2], "steps": steps}
+    return {"title": title, "paras": paras[:8], "steps": steps}
 
 
 def _section_markdown(section: str, fallback_title: str = "") -> str:
@@ -191,6 +214,7 @@ def _readable_snippet(text: str, limit: int = 220) -> str:
 
 def retrieve(db: Session, query: str, user) -> list[dict]:
     best: dict[tuple[str, int], dict] = {}
+    bot_query = _bot_intent(query)
     docs = db.query(Document).filter(Document.status == "APPROVED").all()
     for doc in docs:
         if doc.confidentiality_level == "DEPARTMENT_ONLY" and doc.department_id and doc.department_id != user.department_id:
@@ -227,7 +251,7 @@ def retrieve(db: Session, query: str, user) -> list[dict]:
                 best[key] = item
     for item in db.query(AutomationCatalog).filter(AutomationCatalog.status.in_(["ACTIVE", "PILOT", "UNDER_DEVELOPMENT"])).all():
         text = " ".join(filter(None, [item.name, item.short_description, item.detailed_description, item.business_function, item.business_problem, item.capabilities, item.input_requirements, item.output, item.technology]))
-        s = _score(query, text)
+        s = _score(query, text, item.name)
         if s <= 0:
             continue
         section = _normalize_text("\n\n".join(filter(None, [item.name, item.short_description, item.detailed_description])))
@@ -249,6 +273,10 @@ def retrieve(db: Session, query: str, user) -> list[dict]:
         if key not in best or s > best[key]["score"]:
             best[key] = row
     ranked = sorted(best.values(), key=lambda x: x["score"], reverse=True)
+    if bot_query:
+        bots = [item for item in ranked if item.get("type") == "automation"]
+        if bots:
+            return _select_relevant(query, bots)
     return _select_relevant(query, ranked)
 
 
@@ -296,7 +324,8 @@ SUMMARY_PROMPT = (
 
 def _format_extractive_answer(sources: list[dict]) -> str:
     top = sources[0]
-    return (top.get("body") or top.get("snippet") or "").strip()
+    body = (top.get("body") or top.get("snippet") or "").strip()
+    return _clip_complete(body, 4000)
 
 
 def _context_from_sources(sources: list[dict]) -> str:
@@ -311,7 +340,7 @@ def _reload_llm_keys() -> tuple[str, str, str, str]:
     from dotenv import load_dotenv
 
     load_dotenv(Path(__file__).resolve().parents[2] / ".env", override=True)
-    provider = (os.getenv("LLM_PROVIDER") or settings.llm_provider or "gemini").strip().lower()
+    provider = (os.getenv("LLM_PROVIDER") or settings.llm_provider or "rag").strip().lower()
     gemini_key = (os.getenv("GEMINI_API_KEY") or settings.gemini_api_key or "").strip()
     openai_key = (os.getenv("OPENAI_API_KEY") or settings.openai_api_key or "").strip()
     gemini_model = (os.getenv("GEMINI_MODEL") or settings.gemini_model or "gemini-3.6-flash").strip()
@@ -373,13 +402,14 @@ async def answer_question(db: Session, query: str, user) -> tuple[str, list[dict
 
     context = _context_from_sources(sources)
     provider, gemini_key, openai_key, gemini_model = _reload_llm_keys()
-    try:
-        if provider != "openai" and gemini_key:
-            return await _summarize_with_gemini(query, context, gemini_key, gemini_model), sources, False, "gemini"
-        if openai_key:
-            return await _summarize_with_openai(query, context), sources, False, "openai"
-    except Exception as exc:
-        print(f"LLM summarize failed: {exc}")
-        return _format_extractive_answer(sources), sources, False, "error"
+    if provider in {"gemini", "openai"}:
+        try:
+            if provider == "gemini" and gemini_key:
+                return await _summarize_with_gemini(query, context, gemini_key, gemini_model), sources, False, "gemini"
+            if provider == "openai" and openai_key:
+                return await _summarize_with_openai(query, context), sources, False, "openai"
+        except Exception as exc:
+            print(f"LLM summarize failed: {exc}")
+            return _format_extractive_answer(sources), sources, False, "error"
 
     return _format_extractive_answer(sources), sources, False, "retrieved"

@@ -10,7 +10,7 @@ services:
       - key: DEMO_AUTH_ENABLED
         value: "true"
       - key: LLM_PROVIDER
-        value: gemini
+        value: rag
       - key: GEMINI_MODEL
         value: gemini-3.6-flash
       - key: GEMINI_API_KEY
