@@ -68,7 +68,7 @@ export default function KnowledgePage() {
       <div className="page-heading">
         <p className="eyebrow">APPROVED SOURCES</p>
         <h1>Knowledge Library</h1>
-        <p>Review organizational SOPs, guides and reference material. Demo login can upload and reopen extracted content.</p>
+        <p>Review organizational SOPs, guides and reference material. Set Category on upload (for example Manual) so chat can search with <code>category: Manual - PDF accessibility</code>.</p>
       </div>
       {admin && (
         <form className="upload-panel" onSubmit={upload}>

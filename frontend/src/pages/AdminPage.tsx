@@ -103,7 +103,7 @@ export default function AdminPage() {
     { label: 'Approved Documents', value: d.approved_documents, icon: CheckCircle2, tone: 'teal' },
     { label: 'Outdated Documents', value: d.outdated_documents, icon: CircleAlert, tone: 'gold' },
     { label: 'Knowledge Gaps', value: d.knowledge_gaps, icon: HelpCircle, tone: 'navy' },
-    { label: 'Available Bots', value: d.available_automations, icon: Workflow, tone: 'blue' },
+    { label: 'BOT Automations', value: d.available_automations, icon: Workflow, tone: 'blue' },
     { label: 'Questions Asked', value: d.total_questions, icon: MessagesSquare, tone: 'orange' },
     { label: 'Positive Feedback', value: `${d.positive_feedback_rate}%`, icon: Smile, tone: 'teal' },
     { label: 'Active Users', value: d.active_users, icon: Users, tone: 'navy' },

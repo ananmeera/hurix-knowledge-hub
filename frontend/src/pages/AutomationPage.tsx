@@ -65,7 +65,7 @@ export default function AutomationPage() {
     <section className="page">
       <div className="page-heading">
         <p className="eyebrow">AVAILABLE RPA BOTS</p>
-        <h1>Bot Catalog</h1>
+        <h1>BOT Automations</h1>
         <p>Browse the real RPA bots already built in the organization. Chat searches these bots along with approved knowledge documents.</p>
       </div>
 

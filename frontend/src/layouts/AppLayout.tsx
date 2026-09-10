@@ -10,7 +10,7 @@ export default function AppLayout(){
      <nav>
        <NavLink to="/chat"><Bot size={20}/>AI Chat</NavLink>
        <NavLink to="/knowledge"><BookOpen size={20}/>Knowledge</NavLink>
-       <NavLink to="/automations"><Boxes size={20}/>Bot Catalog</NavLink>
+       <NavLink to="/automations"><Boxes size={20}/>BOT Automations</NavLink>
        {admin && <NavLink to="/admin"><LayoutDashboard size={20}/>Admin</NavLink>}
      </nav>
      <div className="profile"><div className="avatar">{user?.name?.[0] || 'U'}</div><div className="profile-text"><strong>{user?.name}</strong><small>{user?.role}</small></div><button className="icon-btn" onClick={logout} aria-label="Log out"><LogOut size={18}/></button></div>

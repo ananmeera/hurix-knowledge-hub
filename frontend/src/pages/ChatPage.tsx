@@ -8,7 +8,7 @@ import type { ChatMessage, Source } from '../types';
 const prompts = [
   'Does Hurix have a CMU Platform upload BOT?',
   'What does the Evolve Automation bot do?',
-  'How do I upload Folens Hive resources?',
+  'category: Manual - PDF accessibility',
   'What bots are available for Coursera?',
 ];
 
@@ -87,7 +87,7 @@ function SourceCard({ source }: { source: Source }) {
         {source.last_verified_date ? ` • Verified: ${source.last_verified_date}` : ''}
       </small>
       <div className="source-links">
-        {source.href && <Link to={source.href}>{source.type === 'automation' ? 'Open Bot Catalog' : 'Open in Knowledge'}</Link>}
+        {source.href && <Link to={source.href}>{source.type === 'automation' ? 'Open BOT Automations' : 'Open in Knowledge'}</Link>}
         {source.download_url && (
           <a href={source.download_url} target="_blank" rel="noreferrer">
             Download {source.filename || 'original file'}
@@ -198,7 +198,7 @@ export default function ChatPage() {
       </div>
       <form className="composer" onSubmit={submit}>
         <label className="sr-only" htmlFor="chat-input">Ask a question</label>
-        <textarea id="chat-input" value={input} onChange={(e) => setInput(e.target.value)} placeholder="Ask about SOPs, bots, templates, project learnings…" rows={2} />
+        <textarea id="chat-input" value={input} onChange={(e) => setInput(e.target.value)} placeholder="Ask about bots, or search a category: Manual - PDF accessibility" rows={2} />
         <button className="send-btn" disabled={busy || !input.trim()} aria-label="Send message"><Send size={20} /></button>
       </form>
     </div>

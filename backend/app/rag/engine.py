@@ -8,8 +8,9 @@ from app.services.file_store import resolve_stored_file
 
 STOPWORDS = {"the","a","an","is","are","to","of","for","in","on","how","what","do","i","we","our","can","with","and","or","does","did","has","have","there"}
 SHORT_TERMS = {"it", "hr", "qa", "ai", "rpa", "cmu", "d2l", "wgu", "mhe", "oup", "asl", "sbu"}
-GENERIC_TERMS = {"automation","tool","tools","bot","bots","process","available","request","new","document","documents","please","need","help","steps","guide","hurix","company","exist","exists","upload","platform"}
+GENERIC_TERMS = {"automation","tool","tools","bot","bots","process","available","request","new","document","documents","please","need","help","steps","guide","hurix","company","exist","exists","upload","platform","category"}
 BOT_INTENT = re.compile(r"\b(bot|bots|rpa)\b", re.I)
+CATEGORY_MARK = re.compile(r"\bcategory\s*:\s*", re.I)
 HEADER_NOISE = re.compile(r"(requested by|problem statement|developed using|request date|start date|end date|remarks)", re.I)
 CATALOG_HEADER = re.compile(r"(?m)^(?=\d{1,3}\s+[A-Z0-9][A-Za-z0-9][^.?\n]{3,})")
 NAME_BEFORE_EMAIL = re.compile(r"^(.*?(?:Automation|Process|Bot|Guide|SOP|Script|Tool|Assistant))([a-z]{3,})$", re.I)
@@ -25,6 +26,33 @@ def _distinctive(query: str) -> set[str]:
 
 def _bot_intent(query: str) -> bool:
     return bool(BOT_INTENT.search(query or ""))
+
+
+def _parse_category_query(query: str) -> tuple[str | None, str]:
+    raw = (query or "").strip()
+    found = CATEGORY_MARK.search(raw)
+    if not found:
+        return None, raw
+    rest = raw[found.end():].strip()
+    if not rest:
+        return None, raw
+    if rest[0] in "\"'":
+        end = rest.find(rest[0], 1)
+        if end > 0:
+            return rest[1:end].strip(), rest[end + 1:].lstrip(" \t-–—").strip()
+    dashed = re.split(r"\s+-\s+", rest, maxsplit=1)
+    if len(dashed) == 2:
+        return dashed[0].strip(), dashed[1].strip()
+    parts = rest.split(None, 1)
+    return parts[0].strip(), parts[1].strip() if len(parts) > 1 else ""
+
+
+def _category_match(doc_category: str | None, wanted: str) -> bool:
+    have = re.sub(r"\s+", " ", (doc_category or "").strip().lower())
+    need = re.sub(r"\s+", " ", (wanted or "").strip().lower())
+    if not have or not need:
+        return False
+    return have == need or have.startswith(need) or need.startswith(have)
 
 
 def _score(query: str, text: str, title: str = "") -> float:
@@ -214,9 +242,12 @@ def _readable_snippet(text: str, limit: int = 220) -> str:
 
 def retrieve(db: Session, query: str, user) -> list[dict]:
     best: dict[tuple[str, int], dict] = {}
-    bot_query = _bot_intent(query)
+    category, search = _parse_category_query(query)
+    bot_query = _bot_intent(search) and not category
     docs = db.query(Document).filter(Document.status == "APPROVED").all()
     for doc in docs:
+        if category and not _category_match(doc.category, category):
+            continue
         if doc.confidentiality_level == "DEPARTMENT_ONLY" and doc.department_id and doc.department_id != user.department_id:
             continue
         if doc.confidentiality_level == "RESTRICTED" and user.role not in {"SUPER_ADMIN", "ADMIN", "KNOWLEDGE_MANAGER"}:
@@ -233,10 +264,12 @@ def retrieve(db: Session, query: str, user) -> list[dict]:
             "filename": Path(doc.source_location).name.split("_", 1)[-1] if stored and doc.source_location else None,
         }
         normalized = _normalize_text("\n".join(filter(None, [doc.title, doc.extracted_text])))
-        sections = _ensure_term_sections(_split_sections(normalized) or [normalized], normalized, query)
+        sections = _ensure_term_sections(_split_sections(normalized) or [normalized], normalized, search or doc.title)
         for section in sections:
             structured = _structure_section(section, doc.title)
-            s = _score(query, f"{structured['title']}\n{section}", structured["title"])
+            s = _score(search or doc.title, f"{structured['title']}\n{section}", structured["title"])
+            if not search:
+                s = max(s, 1.0)
             if s <= 0:
                 continue
             item = {
@@ -250,8 +283,10 @@ def retrieve(db: Session, query: str, user) -> list[dict]:
             if key not in best or item["score"] > best[key]["score"]:
                 best[key] = item
     for item in db.query(AutomationCatalog).filter(AutomationCatalog.status.in_(["ACTIVE", "PILOT", "UNDER_DEVELOPMENT"])).all():
+        if category:
+            continue
         text = " ".join(filter(None, [item.name, item.short_description, item.detailed_description, item.business_function, item.business_problem, item.capabilities, item.input_requirements, item.output, item.technology]))
-        s = _score(query, text, item.name)
+        s = _score(search or query, text, item.name)
         if s <= 0:
             continue
         section = _normalize_text("\n\n".join(filter(None, [item.name, item.short_description, item.detailed_description])))
@@ -277,7 +312,7 @@ def retrieve(db: Session, query: str, user) -> list[dict]:
         bots = [item for item in ranked if item.get("type") == "automation"]
         if bots:
             return _select_relevant(query, bots)
-    return _select_relevant(query, ranked)
+    return _select_relevant(search or query, ranked)
 
 
 def _source_blob(item: dict) -> str:
@@ -389,16 +424,22 @@ async def _summarize_with_openai(query: str, context: str) -> str:
 
 
 async def answer_question(db: Session, query: str, user) -> tuple[str, list[dict], bool, str]:
+    category, search = _parse_category_query(query)
     sources = retrieve(db, query, user)
     if not sources or sources[0]["score"] < 0.18:
         record_gap(db, query)
-        return (
-            "I couldn't find enough verified organizational knowledge to answer this confidently.\n\n"
-            "Try a more specific question, or ask a Knowledge Manager to add or verify the required information.",
-            sources[:3],
-            True,
-            "none",
-        )
+        if category:
+            detail = f' for “{search}”' if search else ""
+            message = (
+                f'No approved knowledge was found in the "{category}" category{detail}.\n\n'
+                "Upload a document with that category in Knowledge, then approve it."
+            )
+        else:
+            message = (
+                "I couldn't find enough verified organizational knowledge to answer this confidently.\n\n"
+                "Try a more specific question, or ask a Knowledge Manager to add or verify the required information."
+            )
+        return message, sources[:3], True, "none"
 
     context = _context_from_sources(sources)
     provider, gemini_key, openai_key, gemini_model = _reload_llm_keys()
