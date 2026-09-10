@@ -1,6 +1,6 @@
 import { FormEvent, useEffect, useRef, useState, type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
-import { Send, Sparkles, ThumbsDown, ThumbsUp } from 'lucide-react';
+import { Plus, Send, Sparkles, ThumbsDown, ThumbsUp } from 'lucide-react';
 import { api } from '../services/api';
 import { useAuth } from '../auth/AuthContext';
 import type { ChatMessage, Source } from '../types';
@@ -104,6 +104,7 @@ export default function ChatPage() {
   const [input, setInput] = useState('');
   const [busy, setBusy] = useState(false);
   const [sessionId, setSessionId] = useState<number | undefined>();
+  const [ratings, setRatings] = useState<Record<number, 'UP' | 'DOWN'>>({});
   const live = useRef<HTMLDivElement>(null);
   const resultRef = useRef<HTMLElement>(null);
 
@@ -118,7 +119,12 @@ export default function ChatPage() {
         role: row.role,
         content: row.content,
         sources: row.sources || [],
+        rating: row.rating,
       })));
+      setRatings(Object.fromEntries(
+        rows.filter((row: any) => row.id && (row.rating === 'UP' || row.rating === 'DOWN'))
+          .map((row: any) => [row.id, row.rating]),
+      ));
     }).catch(() => undefined);
   }, []);
 
@@ -156,19 +162,41 @@ export default function ChatPage() {
     send(input);
   };
 
-  const rate = async (id: number | undefined, rating: string) => {
-    await api.feedback({ message_id: id, rating });
+  const rate = async (id: number | undefined, rating: 'UP' | 'DOWN') => {
+    if (!id) return;
+    const previous = ratings[id];
+    setRatings((current) => ({ ...current, [id]: rating }));
+    try {
+      await api.feedback({ message_id: id, rating });
+    } catch {
+      setRatings((current) => {
+        const next = { ...current };
+        if (previous) next[id] = previous;
+        else delete next[id];
+        return next;
+      });
+    }
   };
 
   const newChat = () => {
     sessionStorage.removeItem('kh-chat-session');
     setSessionId(undefined);
     setMessages([]);
+    setRatings({});
     setInput('');
   };
 
   return (
     <div className="chat-page">
+      <div className="chat-header">
+        <div>
+          <p className="eyebrow">AI Chat</p>
+          <p className="muted">{messages.length ? 'This thread keeps context for follow-up questions.' : 'Start a question, then ask a follow-up in the same chat.'}</p>
+        </div>
+        <button type="button" className="secondary-btn new-chat-btn" onClick={newChat} disabled={!messages.length && !sessionId}>
+          <Plus size={16} aria-hidden="true" /> New chat
+        </button>
+      </div>
       <div className="chat-scroll">
         {messages.length === 0 ? (
           <section className="welcome">
@@ -181,9 +209,6 @@ export default function ChatPage() {
           </section>
         ) : (
           <section className="conversation" aria-label="Conversation">
-            <div className="chat-toolbar">
-              <button type="button" onClick={newChat}>New chat</button>
-            </div>
             {messages.map((m, i) => (
               <article key={i} className={`message ${m.role}`} ref={i === messages.length - 1 ? resultRef : undefined}>
                 <div className="message-label">
@@ -210,8 +235,10 @@ export default function ChatPage() {
                 {m.role === 'assistant' && (
                   <div className="feedback-actions">
                     <span>Was this useful?</span>
-                    <button onClick={() => rate(m.id, 'UP')} aria-label="Helpful"><ThumbsUp size={16} /></button>
-                    <button onClick={() => rate(m.id, 'DOWN')} aria-label="Not helpful"><ThumbsDown size={16} /></button>
+                    <button type="button" className={m.id && ratings[m.id] === 'UP' ? 'is-on' : ''} onClick={() => rate(m.id, 'UP')} aria-pressed={!!(m.id && ratings[m.id] === 'UP')} aria-label="Helpful"><ThumbsUp size={16} /></button>
+                    <button type="button" className={m.id && ratings[m.id] === 'DOWN' ? 'is-on' : ''} onClick={() => rate(m.id, 'DOWN')} aria-pressed={!!(m.id && ratings[m.id] === 'DOWN')} aria-label="Not helpful"><ThumbsDown size={16} /></button>
+                    {m.id && ratings[m.id] === 'UP' && <small>Marked helpful</small>}
+                    {m.id && ratings[m.id] === 'DOWN' && <small>Marked not helpful</small>}
                   </div>
                 )}
               </article>
@@ -225,7 +252,7 @@ export default function ChatPage() {
       <form className="composer" onSubmit={submit}>
         <label className="sr-only" htmlFor="chat-input">Ask a question</label>
         <textarea id="chat-input" value={input} onChange={(e) => setInput(e.target.value)} placeholder="Ask a question, then a follow-up in this chat" rows={2} />
-        <button className="send-btn" disabled={busy || !input.trim()} aria-label="Send message"><Send size={20} /></button>
+        <button type="submit" className="send-btn" disabled={busy || !input.trim()} aria-label="Send message"><Send size={18} /></button>
       </form>
     </div>
   );

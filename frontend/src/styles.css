@@ -5,11 +5,15 @@ html,body,#root{height:100%;margin:0}
 .main:has(.chat-page){min-height:0;height:100dvh;overflow:hidden}
 .chat-page{flex:1;display:flex;flex-direction:column;min-height:0;width:100%;max-width:980px;margin:0 auto;padding:1.25rem 1.25rem .9rem}
 .chat-scroll{flex:1;min-height:0;overflow-y:auto;padding-bottom:.5rem}
-.welcome{padding-top:4vh}
+.welcome{padding-top:2vh}
 .conversation{gap:1.15rem}
 .message{max-width:100%;scroll-margin-bottom:1rem}
 .message.user{max-width:min(72%,36rem)}
-.composer{position:relative;left:auto;right:auto;bottom:auto;transform:none;width:100%;max-width:none;flex-shrink:0;margin:0}
+.composer{position:relative;left:auto;right:auto;bottom:auto;transform:none;width:100%;max-width:none;flex-shrink:0;margin:0;align-items:center;padding:.4rem .4rem .4rem .95rem}
+.composer textarea{min-height:44px;line-height:1.45;padding:.55rem .45rem}
+.send-btn{align-self:center;width:44px;height:44px;min-width:44px;padding:0;border-radius:50%;display:grid;place-items:center;flex-shrink:0}
+.feedback-actions button.is-on{background:var(--hx-orange);border-color:var(--hx-orange);color:white}
+.feedback-actions small{color:#0F766E;font-weight:700}
 @media(max-width:850px){
   .app-shell{height:auto;min-height:100dvh}
   .main:has(.chat-page){height:auto;min-height:calc(100dvh - 7.5rem);overflow:visible}
@@ -24,10 +28,14 @@ html,body,#root{height:100%;margin:0}
   .composer{width:100%;bottom:auto}
   .profile{position:static}
 }
-.chat-toolbar{display:flex;justify-content:flex-end;margin:0 0 .35rem}
-.chat-toolbar button{background:transparent;border:0;color:#64748b;font-weight:700;cursor:pointer;padding:.2rem .1rem}
-.chat-toolbar button:hover{color:var(--hx-navy)}
+.chat-header{display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-shrink:0;margin:0 0 .85rem;padding-bottom:.75rem;border-bottom:1px solid #e5e7eb}
+.chat-header .eyebrow{margin:0}
+.chat-header .muted{margin:.2rem 0 0}
+.new-chat-btn{display:inline-flex;align-items:center;gap:.4rem;font-weight:700;white-space:nowrap}
+.new-chat-btn:disabled{opacity:.45;cursor:not-allowed}
 .stack-label{display:grid;gap:.35rem;font-weight:600;margin:0 0 .9rem}
 .stack-label textarea{width:100%;padding:.65rem;border:1px solid #cbd5e1;border-radius:8px;background:white;resize:vertical}
 .upload-panel .muted{margin:.35rem 0 1rem}
 .upload-panel .primary-btn{margin-top:.35rem}
+.metric-icon{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;line-height:0}
+.metric-icon svg{display:block;width:20px;height:20px;flex-shrink:0}

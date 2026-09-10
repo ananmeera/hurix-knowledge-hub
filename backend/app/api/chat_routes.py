@@ -58,12 +58,45 @@ def session_messages(session_id: int, db: Session = Depends(get_db), user: User 
     if not session or session.user_id != user.id:
         return []
     msgs = db.query(ChatMessage).filter(ChatMessage.session_id == session_id).order_by(ChatMessage.created_at).all()
-    return [{"id": m.id, "role": m.role, "content": m.content, "sources": m.sources_json or [], "created_at": m.created_at} for m in msgs]
+    if not msgs:
+        return []
+    ids = [m.id for m in msgs]
+    ratings = {
+        row.message_id: row.rating
+        for row in db.query(Feedback).filter(Feedback.user_id == user.id, Feedback.message_id.in_(ids)).all()
+        if row.message_id
+    }
+    return [
+        {
+            "id": m.id,
+            "role": m.role,
+            "content": m.content,
+            "sources": m.sources_json or [],
+            "created_at": m.created_at,
+            "rating": ratings.get(m.id),
+        }
+        for m in msgs
+    ]
 
 
 @router.post("/feedback")
 def feedback(payload: FeedbackIn, db: Session = Depends(get_db), user: User = Depends(get_current_user)):
-    row = Feedback(user_id=user.id, message_id=payload.message_id, rating=payload.rating, reason=payload.reason, comment=payload.comment)
-    db.add(row)
+    rating = (payload.rating or "").strip().upper()
+    if rating not in {"UP", "DOWN"}:
+        return {"ok": False, "detail": "Rating must be UP or DOWN"}
+    row = None
+    if payload.message_id:
+        row = (
+            db.query(Feedback)
+            .filter(Feedback.user_id == user.id, Feedback.message_id == payload.message_id)
+            .order_by(Feedback.id.desc())
+            .first()
+        )
+    if row:
+        row.rating = rating
+        row.reason = payload.reason
+        row.comment = payload.comment
+    else:
+        db.add(Feedback(user_id=user.id, message_id=payload.message_id, rating=rating, reason=payload.reason, comment=payload.comment))
     db.commit()
-    return {"ok": True}
+    return {"ok": True, "rating": rating}
