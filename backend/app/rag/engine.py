@@ -205,7 +205,7 @@ def retrieve(db: Session, query: str, user) -> list[dict]:
             "owner": doc.owner,
             "last_verified_date": str(doc.last_verified_date) if doc.last_verified_date else None,
             "href": f"/knowledge?doc={doc.id}",
-            "download_url": f"{settings.backend_url}/api/knowledge/documents/{doc.id}/file" if stored else None,
+            "download_url": f"/api/knowledge/documents/{doc.id}/file" if stored else None,
             "filename": Path(doc.source_location).name.split("_", 1)[-1] if stored and doc.source_location else None,
         }
         normalized = _normalize_text("\n".join(filter(None, [doc.title, doc.extracted_text])))

@@ -104,7 +104,7 @@ export default function KnowledgePage() {
             <div><dt>Owner</dt><dd>{selected.owner || '—'}</dd></div>
             <div><dt>Version</dt><dd>{selected.version}</dd></div>
             <div><dt>File</dt><dd>{selected.source_location ? (
-              <a href={`${import.meta.env.VITE_API_BASE || 'http://localhost:8000/api'}/knowledge/documents/${selected.id}/file`} target="_blank" rel="noreferrer">
+              <a href={`${import.meta.env.VITE_API_BASE || '/api'}/knowledge/documents/${selected.id}/file`} target="_blank" rel="noreferrer">
                 {selected.source_location.split('_').slice(1).join('_') || selected.source_location}
               </a>
             ) : '—'}</dd></div>

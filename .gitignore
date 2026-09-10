@@ -3,6 +3,8 @@
 .env.*
 !.env.example
 !**/.env.example
+!.env.production
+!**/.env.production
 backend/.env
 frontend/.env
 
@@ -27,6 +29,7 @@ node_modules/
 frontend/node_modules/
 frontend/dist/
 frontend/build/
+*.tsbuildinfo
 
 # Credentials and keys
 *.pem
