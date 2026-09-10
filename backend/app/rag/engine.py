@@ -8,7 +8,14 @@ from app.services.file_store import resolve_stored_file
 
 STOPWORDS = {"the","a","an","is","are","to","of","for","in","on","how","what","do","i","we","our","can","with","and","or","does","did","has","have","there"}
 SHORT_TERMS = {"it", "hr", "qa", "ai", "rpa", "cmu", "d2l", "wgu", "mhe", "oup", "asl", "sbu"}
-GENERIC_TERMS = {"automation","tool","tools","bot","bots","process","available","request","new","document","documents","please","need","help","steps","guide","hurix","company","exist","exists","upload","platform","category"}
+GENERIC_TERMS = {
+    "automation","tool","tools","bot","bots","process","available","request","new",
+    "document","documents","please","need","help","steps","guide","hurix","company",
+    "exist","exists","upload","platform","category","handled","handling","using","used",
+    "about","into","also","only","more","than","such","each","both","make","made",
+    "from","they","their","them","should","must","been","being","will","that","this",
+    "which","when","where","these","those","here","there","technique","techniques",
+}
 BOT_INTENT = re.compile(r"\b(bot|bots|rpa)\b", re.I)
 CATEGORY_MARK = re.compile(r"\bcategory\s*:\s*", re.I)
 HEADER_NOISE = re.compile(r"(requested by|problem statement|developed using|request date|start date|end date|remarks)", re.I)
@@ -30,14 +37,60 @@ def _bot_intent(query: str) -> bool:
     return bool(BOT_INTENT.search(query or ""))
 
 
+def _term_variants(term: str) -> list[str]:
+    word = (term or "").lower().strip()
+    if not word:
+        return []
+    variants = [word]
+    if word.endswith("s") and len(word) > 4:
+        variants.append(word[:-1])
+    else:
+        variants.append(f"{word}s")
+    seen: list[str] = []
+    for item in variants:
+        if item not in seen:
+            seen.append(item)
+    return seen
+
+
 def _term_in(term: str, blob: str) -> bool:
     text = blob.lower()
-    word = re.escape(term.lower())
-    if re.search(rf"\b{word}\b", text):
-        return True
-    if term.lower().endswith("s") and len(term) > 4 and re.search(rf"\b{re.escape(term.lower()[:-1])}\b", text):
-        return True
-    return bool(re.search(rf"\b{word}s\b", text))
+    return any(re.search(rf"\b{re.escape(variant)}\b", text) for variant in _term_variants(term))
+
+
+def _term_span(text: str, term: str) -> tuple[int, int] | None:
+    blob = text.lower()
+    best: tuple[int, int] | None = None
+    for variant in _term_variants(term):
+        match = re.search(rf"\b{re.escape(variant)}\b", blob)
+        if match and (best is None or match.start() < best[0]):
+            best = (match.start(), match.end())
+    return best
+
+
+def _term_df(term: str, sections: list[str]) -> int:
+    return sum(1 for section in sections if _term_in(term, section))
+
+
+def _focus_terms(query: str, sections: list[str], doc_title: str = "") -> set[str]:
+    candidates = _distinctive(query)
+    if not candidates:
+        return set()
+    count = max(1, len(sections))
+    df = {term: _term_df(term, sections) for term in candidates}
+    title_terms = _terms(doc_title)
+    if count >= 4:
+        rare = {term for term in candidates if 0 < df[term] / count <= 0.35 and term not in title_terms}
+        if rare:
+            return rare
+    occurring = [term for term in candidates if df[term] > 0 and term not in title_terms]
+    if not occurring:
+        occurring = [term for term in candidates if df[term] > 0]
+    if not occurring:
+        return set()
+    occurring.sort(key=lambda term: (df[term], -len(term)))
+    rarest = df[occurring[0]]
+    return {term for term in occurring if df[term] == rarest}
 
 
 def _parse_category_query(query: str) -> tuple[str | None, str]:
@@ -67,27 +120,28 @@ def _category_match(doc_category: str | None, wanted: str) -> bool:
     return have == need or have.startswith(need) or need.startswith(have)
 
 
-def _score(query: str, text: str, title: str = "") -> float:
+def _score(query: str, text: str, title: str = "", focus: set[str] | None = None) -> float:
     q = _terms(query)
-    blob = f"{title}\n{text}".lower()
+    blob = f"{title}\n{text}"
     t = _terms(blob)
     if not q:
         return 0
-    overlap = len(q & t)
-    coverage = overlap / len(q)
-    title_hit = (len(q & _terms(title)) / len(q)) if title else 0
-    score = coverage + (title_hit * 0.5)
-    distinctive = _distinctive(query)
+    coverage = len(q & t) / len(q)
+    score = coverage
+    distinctive = focus if focus is not None else _distinctive(query)
     if distinctive:
         hits = sum(1 for term in distinctive if _term_in(term, blob))
         if hits == 0:
-            return score * 0.12
-        score += 1.5 * (hits / len(distinctive))
-        if title and any(_term_in(term, title) for term in distinctive):
-            score += 1.25
-        title_terms = _terms(title)
-        if title_terms and distinctive:
-            score += 2.0 * (len(distinctive & title_terms) / len(distinctive))
+            return score * 0.05
+        score += 2.6 * (hits / len(distinctive))
+        title_hits = sum(1 for term in distinctive if _term_in(term, title))
+        if title_hits:
+            score += 2.0 * (title_hits / len(distinctive))
+        if hits == len(distinctive):
+            score += 0.5
+        return score
+    if title:
+        score += 0.4 * (len(q & _terms(title)) / len(q))
     return score
 
 
@@ -156,9 +210,10 @@ def _split_sections(text: str) -> list[str]:
 
 
 def _window_around_term(text: str, term: str) -> str | None:
-    idx = text.lower().find(term.lower())
-    if idx < 0:
+    span = _term_span(text, term)
+    if not span:
         return None
+    idx, term_end = span
     prefix = text[:idx]
     start = 0
     for marker in ("\nTechnique PDF", "\n### ", "\n## ", "\n# "):
@@ -167,17 +222,17 @@ def _window_around_term(text: str, term: str) -> str | None:
             start = found + 1
     if start == 0:
         start = max(0, prefix.rfind("\n\n"))
-    rest = text[idx + len(term):]
+    rest = text[term_end:]
     nxt = re.search(r"\n(?:Technique PDF\d+|#{1,3}\s+\S)", rest)
-    end = idx + len(term) + (nxt.start() if nxt else min(len(rest), 900))
+    end = term_end + (nxt.start() if nxt else min(len(rest), 900))
     window = text[start:end].strip()
     return window if len(window) > 40 else None
 
 
-def _ensure_term_sections(sections: list[str], text: str, query: str) -> list[str]:
+def _ensure_term_sections(sections: list[str], text: str, terms: set[str]) -> list[str]:
     extras = list(sections)
     seen = {section.lower()[:160] for section in extras}
-    for term in _distinctive(query):
+    for term in terms:
         window = _window_around_term(text, term)
         if window and window.lower()[:160] not in seen:
             extras.append(window)
@@ -238,20 +293,35 @@ def _section_markdown(section: str, fallback_title: str = "") -> str:
     return "\n".join(lines).strip()
 
 
+def _rank_passages(ask: str, doc_title: str, normalized: str) -> tuple[list[tuple[float, str]], set[str]]:
+    base = _split_sections(normalized) or ([normalized] if normalized else [])
+    if not base:
+        return [], set()
+    focus = _focus_terms(ask, base, doc_title)
+    sections = _ensure_term_sections(base, normalized, focus or _distinctive(ask))
+    scored: list[tuple[float, str]] = []
+    for section in sections:
+        structured = _structure_section(section, doc_title)
+        value = _score(ask, f"{structured['title']}\n{section}", structured["title"], focus)
+        if value <= 0:
+            continue
+        scored.append((value, section))
+    if focus:
+        matching = [(value, section) for value, section in scored if any(_term_in(term, section) for term in focus)]
+        if matching:
+            scored = matching
+        elif not any(_term_in(term, normalized) for term in focus):
+            return [], focus
+    scored.sort(key=lambda pair: pair[0], reverse=True)
+    return scored, focus
+
+
 def _best_section(query: str, full_text: str, chunk: str) -> str:
     normalized = _normalize_text(full_text or chunk)
-    sections = _split_sections(normalized)
-    if not sections:
+    ranked, _focus = _rank_passages(query, "", normalized)
+    if not ranked:
         return _normalize_text(chunk)
-    ranked = sorted(
-        sections,
-        key=lambda section: _score(query, section, _structure_section(section).get("title", "")),
-        reverse=True,
-    )
-    winner = ranked[0]
-    if _score(query, winner) <= 0 and chunk:
-        winner = _normalize_text(chunk)
-    return winner
+    return ranked[0][1]
 
 
 def _readable_snippet(text: str, limit: int = 220) -> str:
@@ -292,26 +362,13 @@ def retrieve(db: Session, query: str, user) -> list[dict]:
         }
         normalized = _normalize_text("\n".join(filter(None, [doc.title, doc.extracted_text])))
         ask = search or doc.title
-        sections = _ensure_term_sections(_split_sections(normalized) or [normalized], normalized, ask)
-        scored_sections: list[tuple[float, str]] = []
-        for section in sections:
-            structured = _structure_section(section, doc.title)
-            s = _score(ask, f"{structured['title']}\n{section}", structured["title"])
-            if not search:
-                s = max(s, 1.0)
-            if s <= 0:
-                continue
-            scored_sections.append((s, section))
+        scored_sections, focus = _rank_passages(ask, doc.title, normalized)
+        if not search:
+            scored_sections = [(max(score, 1.0), section) for score, section in scored_sections] or [(1.0, normalized)]
         if not scored_sections:
             continue
-        scored_sections.sort(key=lambda pair: pair[0], reverse=True)
         winner = scored_sections[0][1]
         structured = _structure_section(winner, doc.title)
-        distinctive = _distinctive(ask)
-        focus = {term for term in distinctive if _term_in(term, winner) or _term_in(term, structured["title"])}
-        title_focus = {term for term in focus if _term_in(term, structured["title"])}
-        if title_focus:
-            focus = title_focus
         related = [winner]
         if focus:
             for _score_value, section in scored_sections:
@@ -372,16 +429,18 @@ def _source_blob(item: dict) -> str:
 def _select_relevant(query: str, ranked: list[dict]) -> list[dict]:
     if not ranked:
         return []
+    blobs = [_source_blob(item) for item in ranked]
+    focus = _focus_terms(query, blobs)
+    if focus:
+        matching = [item for item in ranked if any(_term_in(term, _source_blob(item)) for term in focus)]
+        if matching:
+            ranked = matching
     top = ranked[0]
-    distinctive = _distinctive(query)
-    top_hits = sum(1 for term in distinctive if term in _source_blob(top))
-    needed = max(1, (top_hits + 1) // 2) if distinctive and top_hits else 0
     selected = [top]
     for item in ranked[1:]:
         if item["score"] < max(0.55, top["score"] * 0.7):
             continue
-        hits = sum(1 for term in distinctive if term in _source_blob(item))
-        if distinctive and top_hits >= 1 and hits < needed:
+        if focus and not any(_term_in(term, _source_blob(item)) for term in focus):
             continue
         selected.append(item)
         if len(selected) == 3:
