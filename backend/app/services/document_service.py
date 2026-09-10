@@ -15,7 +15,21 @@ def extract_text(filename: str, content: bytes) -> str:
         return "\n".join((page.extract_text() or "") for page in reader.pages)
     if ext == ".docx":
         doc = DocxDocument(BytesIO(content))
-        return "\n".join(p.text for p in doc.paragraphs)
+        lines: list[str] = []
+        for paragraph in doc.paragraphs:
+            text = (paragraph.text or "").strip()
+            if not text:
+                continue
+            style = (paragraph.style.name or "").lower() if paragraph.style else ""
+            if style.startswith("heading 1"):
+                lines.append(f"# {text}")
+            elif style.startswith("heading 2"):
+                lines.append(f"## {text}")
+            elif style.startswith("heading 3"):
+                lines.append(f"### {text}")
+            else:
+                lines.append(text)
+        return "\n\n".join(lines)
     return content.decode("utf-8", errors="replace")
 
 

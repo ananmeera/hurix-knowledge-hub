@@ -40,6 +40,18 @@ def health():
     return {"status": "ok", "service": "knowledge-hub-ai"}
 
 
+@app.get("/favicon.ico")
+def favicon():
+    for candidate in (
+        FRONTEND_DIST / "favicon.ico",
+        Path(__file__).resolve().parents[2] / "frontend" / "public" / "favicon.ico",
+        Path(__file__).resolve().parents[2] / "frontend" / "favicon.ico",
+    ):
+        if candidate.is_file():
+            return FileResponse(candidate, media_type="image/x-icon")
+    return JSONResponse({"detail": "favicon missing"}, status_code=404)
+
+
 @app.get("/{full_path:path}")
 def spa_fallback(full_path: str):
     candidate = FRONTEND_DIST / full_path

@@ -13,6 +13,8 @@ BOT_INTENT = re.compile(r"\b(bot|bots|rpa)\b", re.I)
 CATEGORY_MARK = re.compile(r"\bcategory\s*:\s*", re.I)
 HEADER_NOISE = re.compile(r"(requested by|problem statement|developed using|request date|start date|end date|remarks)", re.I)
 CATALOG_HEADER = re.compile(r"(?m)^(?=\d{1,3}\s+[A-Z0-9][A-Za-z0-9][^.?\n]{3,})")
+TECHNIQUE_SPLIT = re.compile(r"(?m)(?=^(?:#{1,3}\s+)?Technique PDF\d+)")
+MD_HEADING_SPLIT = re.compile(r"(?m)(?=^#{1,3}\s+\S)")
 NAME_BEFORE_EMAIL = re.compile(r"^(.*?(?:Automation|Process|Bot|Guide|SOP|Script|Tool|Assistant))([a-z]{3,})$", re.I)
 
 
@@ -26,6 +28,16 @@ def _distinctive(query: str) -> set[str]:
 
 def _bot_intent(query: str) -> bool:
     return bool(BOT_INTENT.search(query or ""))
+
+
+def _term_in(term: str, blob: str) -> bool:
+    text = blob.lower()
+    word = re.escape(term.lower())
+    if re.search(rf"\b{word}\b", text):
+        return True
+    if term.lower().endswith("s") and len(term) > 4 and re.search(rf"\b{re.escape(term.lower()[:-1])}\b", text):
+        return True
+    return bool(re.search(rf"\b{word}s\b", text))
 
 
 def _parse_category_query(query: str) -> tuple[str | None, str]:
@@ -67,11 +79,11 @@ def _score(query: str, text: str, title: str = "") -> float:
     score = coverage + (title_hit * 0.5)
     distinctive = _distinctive(query)
     if distinctive:
-        hits = sum(1 for term in distinctive if term in blob)
+        hits = sum(1 for term in distinctive if _term_in(term, blob))
         if hits == 0:
             return score * 0.12
         score += 1.5 * (hits / len(distinctive))
-        if title and any(term in title.lower() for term in distinctive):
+        if title and any(_term_in(term, title) for term in distinctive):
             score += 1.25
         title_terms = _terms(title)
         if title_terms and distinctive:
@@ -124,6 +136,9 @@ def _clip_complete(text: str, limit: int = 4000) -> str:
 
 
 def _split_sections(text: str) -> list[str]:
+    techniques = [part.strip() for part in TECHNIQUE_SPLIT.split(text) if len(part.strip()) > 30]
+    if len(techniques) >= 2:
+        return [_clip_complete(part, 2200) for part in techniques[:80]]
     catalog = [part.strip() for part in CATALOG_HEADER.split(text) if len(part.strip()) > 40]
     usable = []
     for part in catalog:
@@ -133,28 +148,40 @@ def _split_sections(text: str) -> list[str]:
             usable.append(part)
     if len(usable) >= 2:
         return usable
-    headed = [part.strip() for part in re.split(r"(?m)(?=^#{1,3}\s+\S)", text) if part.strip()]
+    headed = [part.strip() for part in MD_HEADING_SPLIT.split(text) if part.strip()]
     if len(headed) >= 2:
-        return headed[:40]
+        return headed[:60]
     paras = [part.strip() for part in re.split(r"\n{2,}", text) if part.strip()]
     return paras or ([text] if text else [])
 
 
+def _window_around_term(text: str, term: str) -> str | None:
+    idx = text.lower().find(term.lower())
+    if idx < 0:
+        return None
+    prefix = text[:idx]
+    start = 0
+    for marker in ("\nTechnique PDF", "\n### ", "\n## ", "\n# "):
+        found = prefix.rfind(marker)
+        if found > start:
+            start = found + 1
+    if start == 0:
+        start = max(0, prefix.rfind("\n\n"))
+    rest = text[idx + len(term):]
+    nxt = re.search(r"\n(?:Technique PDF\d+|#{1,3}\s+\S)", rest)
+    end = idx + len(term) + (nxt.start() if nxt else min(len(rest), 900))
+    window = text[start:end].strip()
+    return window if len(window) > 40 else None
+
+
 def _ensure_term_sections(sections: list[str], text: str, query: str) -> list[str]:
-    existing = "\n".join(sections).lower()
     extras = list(sections)
+    seen = {section.lower()[:160] for section in extras}
     for term in _distinctive(query):
-        if term in existing:
-            continue
-        idx = text.lower().find(term)
-        if idx < 0:
-            continue
-        start = text.rfind("\n", 0, idx)
-        start = 0 if start < 0 else start + 1
-        end = text.find("\n", idx + len(term) + 400)
-        window = text[start: end if end > 0 else start + 1800].strip()
-        if len(window) > 40:
+        window = _window_around_term(text, term)
+        if window and window.lower()[:160] not in seen:
             extras.append(window)
+            seen.add(window.lower()[:160])
     return extras
 
 
@@ -264,24 +291,47 @@ def retrieve(db: Session, query: str, user) -> list[dict]:
             "filename": Path(doc.source_location).name.split("_", 1)[-1] if stored and doc.source_location else None,
         }
         normalized = _normalize_text("\n".join(filter(None, [doc.title, doc.extracted_text])))
-        sections = _ensure_term_sections(_split_sections(normalized) or [normalized], normalized, search or doc.title)
+        ask = search or doc.title
+        sections = _ensure_term_sections(_split_sections(normalized) or [normalized], normalized, ask)
+        scored_sections: list[tuple[float, str]] = []
         for section in sections:
             structured = _structure_section(section, doc.title)
-            s = _score(search or doc.title, f"{structured['title']}\n{section}", structured["title"])
+            s = _score(ask, f"{structured['title']}\n{section}", structured["title"])
             if not search:
                 s = max(s, 1.0)
             if s <= 0:
                 continue
-            item = {
-                **source_meta,
-                "score": s,
-                "title": structured["title"] or doc.title,
-                "snippet": _readable_snippet(section),
-                "body": _section_markdown(section, doc.title),
-            }
-            key = ("document", doc.id)
-            if key not in best or item["score"] > best[key]["score"]:
-                best[key] = item
+            scored_sections.append((s, section))
+        if not scored_sections:
+            continue
+        scored_sections.sort(key=lambda pair: pair[0], reverse=True)
+        winner = scored_sections[0][1]
+        structured = _structure_section(winner, doc.title)
+        distinctive = _distinctive(ask)
+        focus = {term for term in distinctive if _term_in(term, winner) or _term_in(term, structured["title"])}
+        title_focus = {term for term in focus if _term_in(term, structured["title"])}
+        if title_focus:
+            focus = title_focus
+        related = [winner]
+        if focus:
+            for _score_value, section in scored_sections:
+                if section == winner:
+                    continue
+                if any(_term_in(term, section) for term in focus):
+                    related.append(section)
+                if len(related) == 3:
+                    break
+        body_parts = [_section_markdown(section, doc.title) for section in related]
+        item = {
+            **source_meta,
+            "score": scored_sections[0][0],
+            "title": structured["title"] or doc.title,
+            "snippet": _readable_snippet(winner),
+            "body": "\n\n".join(part for part in body_parts if part),
+        }
+        key = ("document", doc.id)
+        if key not in best or item["score"] > best[key]["score"]:
+            best[key] = item
     for item in db.query(AutomationCatalog).filter(AutomationCatalog.status.in_(["ACTIVE", "PILOT", "UNDER_DEVELOPMENT"])).all():
         if category:
             continue
