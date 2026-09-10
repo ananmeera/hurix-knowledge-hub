@@ -153,11 +153,12 @@ For production, use HTTPS and change authentication cookies to `secure=True`.
 Set:
 
 ```env
-OPENAI_API_KEY=...
-OPENAI_MODEL=gpt-4.1-mini
+LLM_PROVIDER=gemini
+GEMINI_API_KEY=...
+GEMINI_MODEL=gemini-3.6-flash
 ```
 
-If no API key is configured, the chatbot still works in demo mode using retrieved approved text only. It explicitly tells the user that generative AI is disabled.
+Chat retrieves approved knowledge first, then Gemini summarizes that result for the screen. Leave `GEMINI_API_KEY` empty to show the retrieved text without generation. OpenAI is still available if you set `LLM_PROVIDER=openai` and `OPENAI_API_KEY`.
 
 ## 5. PostgreSQL target setup
 

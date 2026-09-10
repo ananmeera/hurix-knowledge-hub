@@ -69,6 +69,7 @@ class ChatResponse(BaseModel):
     answer: str
     sources: list[SourceOut]
     knowledge_gap: bool = False
+    generated_by: str = "retrieved"
 
 
 class FeedbackIn(BaseModel):

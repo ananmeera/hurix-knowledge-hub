@@ -126,6 +126,7 @@ export default function ChatPage() {
         content: r.answer,
         sources: r.sources,
         knowledge_gap: r.knowledge_gap,
+        generated_by: r.generated_by,
       }]);
     } catch (e: any) {
       setMessages((m) => [...m, { role: 'assistant', content: `Unable to answer: ${e.message}` }]);
@@ -158,7 +159,13 @@ export default function ChatPage() {
         <section className="conversation" aria-label="Conversation">
           {messages.map((m, i) => (
             <article key={i} className={`message ${m.role}`} ref={i === messages.length - 1 ? resultRef : undefined}>
-              <div className="message-label">{m.role === 'user' ? 'You' : 'Knowledge Hub AI'}</div>
+              <div className="message-label">
+                {m.role === 'user' ? 'You' : 'Knowledge Hub AI'}
+                {m.role === 'assistant' && m.generated_by === 'gemini' && <span className="gen-badge gemini">Summarized by Gemini</span>}
+                {m.role === 'assistant' && m.generated_by === 'openai' && <span className="gen-badge">Summarized by AI</span>}
+                {m.role === 'assistant' && m.generated_by === 'retrieved' && <span className="gen-badge warn">Source text only — add GEMINI_API_KEY</span>}
+                {m.role === 'assistant' && m.generated_by === 'error' && <span className="gen-badge warn">Gemini failed — showing source text</span>}
+              </div>
               <div className="message-body">
                 {m.role === 'assistant' ? <AnswerBody content={m.content} /> : m.content}
               </div>

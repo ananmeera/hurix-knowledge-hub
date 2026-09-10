@@ -21,7 +21,7 @@ async def chat(payload: ChatRequest, db: Session = Depends(get_db), user: User =
         db.refresh(session)
 
     db.add(ChatMessage(session_id=session.id, role="user", content=payload.message))
-    answer, sources, gap = await answer_question(db, payload.message, user)
+    answer, sources, gap, generated_by = await answer_question(db, payload.message, user)
     assistant = ChatMessage(session_id=session.id, role="assistant", content=answer, sources_json=sources)
     db.add(assistant)
     db.commit()
@@ -32,6 +32,7 @@ async def chat(payload: ChatRequest, db: Session = Depends(get_db), user: User =
         answer=answer,
         sources=[SourceOut(**{k: s.get(k) for k in SourceOut.model_fields}) for s in sources],
         knowledge_gap=gap,
+        generated_by=generated_by,
     )
 
 
