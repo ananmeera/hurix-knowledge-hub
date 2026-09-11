@@ -90,6 +90,25 @@ def test_pdf16_query_returns_lang_entry_not_it_sop():
     assert "pdf16" in sop_focus
 
 
+def test_mars_2027_leave_does_not_use_generic_leave_policy():
+    ranked, _focus = _rank_passages(
+        "What is the 2027 leave policy in Mars?",
+        "Linked Leave Policy",
+        _normalize_text("Employees may take 20 days of annual leave after probation. Request leave through HR portal."),
+    )
+    assert ranked == []
+
+
+def test_generic_leave_question_can_use_leave_policy():
+    ranked, _focus = _rank_passages(
+        "What is the leave policy?",
+        "Linked Leave Policy",
+        _normalize_text("Employees may take 20 days of annual leave after probation. Request leave through HR portal."),
+    )
+    assert ranked
+    assert "leave" in ranked[0][1].lower()
+
+
 def test_outdated_and_expired_documents_are_not_searchable():
     assert _is_searchable_document(SimpleNamespace(status="APPROVED", expiry_date=None))
     assert not _is_searchable_document(SimpleNamespace(status="OUTDATED", expiry_date=None))

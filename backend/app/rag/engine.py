@@ -312,8 +312,32 @@ def _section_markdown(section: str, fallback_title: str = "") -> str:
     return "\n".join(lines).strip()
 
 
+def _document_covers_query(query: str, title: str, text: str) -> bool:
+    ask = (query or "").strip()
+    if not ask:
+        return True
+    blob = f"{title}\n{text}"
+    anchors = _technique_ids(ask)
+    if anchors and not any(_term_in(term, blob) for term in anchors):
+        return False
+    distinctive = _distinctive(ask)
+    numbers = {term for term in distinctive if term.isdigit()}
+    if numbers and not all(_term_in(term, blob) for term in numbers):
+        return False
+    extra = {term for term in distinctive if term not in _terms(title) and term not in numbers}
+    if extra and not any(_term_in(term, blob) for term in extra):
+        return False
+    hits = {term for term in distinctive if _term_in(term, blob)}
+    missing = distinctive - hits
+    if distinctive and hits and hits <= _terms(title) and missing:
+        return False
+    return True
+
+
 def _rank_passages(ask: str, doc_title: str, normalized: str) -> tuple[list[tuple[float, str]], set[str]]:
     anchors = _technique_ids(ask)
+    if not _document_covers_query(ask, doc_title, normalized):
+        return [], anchors or _distinctive(ask)
     if anchors and not any(_term_in(term, f"{doc_title}\n{normalized}") for term in anchors):
         return [], anchors
     base = _split_sections(normalized) or ([normalized] if normalized else [])
@@ -400,6 +424,8 @@ def retrieve(db: Session, query: str, user) -> list[dict]:
         }
         normalized = _normalize_text("\n".join(filter(None, [doc.title, doc.extracted_text])))
         ask = search or doc.title
+        if search and not _document_covers_query(ask, doc.title, normalized):
+            continue
         scored_sections, focus = _rank_passages(ask, doc.title, normalized)
         if not search:
             scored_sections = [(max(score, 1.0), section) for score, section in scored_sections] or [(1.0, normalized)]
@@ -433,6 +459,8 @@ def retrieve(db: Session, query: str, user) -> list[dict]:
         text = " ".join(filter(None, [item.name, item.short_description, item.detailed_description, item.business_function, item.business_problem, item.capabilities, item.input_requirements, item.output, item.technology]))
         s = _score(search or query, text, item.name)
         if s <= 0:
+            continue
+        if search and not _document_covers_query(search or query, item.name, text):
             continue
         section = _normalize_text("\n\n".join(filter(None, [item.name, item.short_description, item.detailed_description])))
         row = {
