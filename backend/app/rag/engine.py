@@ -1,6 +1,8 @@
 from __future__ import annotations
 import re
+from datetime import date
 from pathlib import Path
+from sqlalchemy import func
 from sqlalchemy.orm import Session
 from app.models import Document, AutomationCatalog, KnowledgeGap
 from app.core.config import settings
@@ -358,12 +360,25 @@ def _readable_snippet(text: str, limit: int = 220) -> str:
     return (clipped[:word_end] if word_end > 0 else clipped).rstrip(" ,;:") + "…"
 
 
+def _is_searchable_document(doc) -> bool:
+    if (getattr(doc, "status", "") or "").strip().upper() != "APPROVED":
+        return False
+    expiry = getattr(doc, "expiry_date", None)
+    return not (expiry and expiry < date.today())
+
+
 def retrieve(db: Session, query: str, user) -> list[dict]:
     best: dict[tuple[str, int], dict] = {}
     category, search = _parse_category_query(query)
     bot_query = _bot_intent(search) and not category
-    docs = db.query(Document).filter(Document.status == "APPROVED").all()
+    docs = (
+        db.query(Document)
+        .filter(func.upper(func.trim(Document.status)) == "APPROVED")
+        .all()
+    )
     for doc in docs:
+        if not _is_searchable_document(doc):
+            continue
         if category and not _category_match(doc.category, category):
             continue
         if doc.confidentiality_level == "DEPARTMENT_ONLY" and doc.department_id and doc.department_id != user.department_id:
@@ -374,6 +389,8 @@ def retrieve(db: Session, query: str, user) -> list[dict]:
         source_meta = {
             "type": "document",
             "id": doc.id,
+            "document_title": doc.title,
+            "status": "APPROVED",
             "version": doc.version,
             "owner": doc.owner,
             "last_verified_date": str(doc.last_verified_date) if doc.last_verified_date else None,

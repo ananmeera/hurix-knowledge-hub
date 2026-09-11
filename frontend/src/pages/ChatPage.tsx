@@ -78,9 +78,11 @@ function SourceCard({ source }: { source: Source }) {
     <article className="source-card">
       <div className="source-meta">
         <span className="pill">{source.type === 'automation' ? 'Bot' : 'Document'}</span>
+        {source.status && <span className="pill">{source.status}</span>}
         {source.version && <span>v{source.version}</span>}
       </div>
       <h3>{source.title}</h3>
+      {source.document_title && source.document_title !== source.title && <p className="source-doc">{source.document_title}</p>}
       {source.snippet && <p>{source.snippet}</p>}
       <small>
         {source.owner ? `Owner: ${source.owner}` : ''}

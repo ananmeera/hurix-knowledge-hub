@@ -92,6 +92,11 @@ def approve(document_id: int, db: Session = Depends(get_db), user: User = Depend
     if not doc:
         raise HTTPException(status_code=404, detail="Document not found")
     doc.status = "APPROVED"
+    title_key = (doc.title or "").strip().lower()
+    if title_key:
+        for other in db.query(Document).filter(Document.id != doc.id).all():
+            if (other.title or "").strip().lower() == title_key and (other.status or "").strip().upper() == "APPROVED":
+                other.status = "OUTDATED"
     db.commit()
     db.refresh(doc)
     return doc

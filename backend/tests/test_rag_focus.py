@@ -1,4 +1,6 @@
-from app.rag.engine import _rank_passages, _normalize_text
+from datetime import date, timedelta
+from types import SimpleNamespace
+from app.rag.engine import _is_searchable_document, _rank_passages, _normalize_text
 
 MANUAL = """
 PDF Accessibility
@@ -86,3 +88,10 @@ def test_pdf16_query_returns_lang_entry_not_it_sop():
     )
     assert sop == []
     assert "pdf16" in sop_focus
+
+
+def test_outdated_and_expired_documents_are_not_searchable():
+    assert _is_searchable_document(SimpleNamespace(status="APPROVED", expiry_date=None))
+    assert not _is_searchable_document(SimpleNamespace(status="OUTDATED", expiry_date=None))
+    assert not _is_searchable_document(SimpleNamespace(status="DRAFT", expiry_date=None))
+    assert not _is_searchable_document(SimpleNamespace(status=" approved ", expiry_date=date.today() - timedelta(days=1)))

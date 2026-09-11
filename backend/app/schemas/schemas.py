@@ -70,6 +70,8 @@ class SourceOut(BaseModel):
     title: str
     id: int
     snippet: str
+    document_title: str | None = None
+    status: str | None = None
     version: str | None = None
     owner: str | None = None
     last_verified_date: str | None = None

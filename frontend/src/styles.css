@@ -39,3 +39,4 @@ html,body,#root{height:100%;margin:0}
 .upload-panel .primary-btn{margin-top:.35rem}
 .metric-icon{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;line-height:0}
 .metric-icon svg{display:block;width:20px;height:20px;flex-shrink:0}
+.source-doc{margin:.15rem 0 0;color:#64748b;font-size:.85rem}
